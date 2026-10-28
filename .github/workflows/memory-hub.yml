@@ -1,0 +1,47 @@
+name: Memory Hub verification
+on:
+  push:
+    paths: ['MemoryHub/**', '.github/workflows/memory-hub.yml']
+  pull_request:
+    paths: ['MemoryHub/**', '.github/workflows/memory-hub.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  container-and-acceptance:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    defaults:
+      run:
+        working-directory: MemoryHub
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+      - name: Configure isolated CI database
+        run: |
+          printf 'POSTGRES_PASSWORD=%s\n' "$(openssl rand -hex 24)" >> "$GITHUB_ENV"
+      - name: Validate Compose
+        run: |
+          docker compose -f compose.yml -f compose.local.yml config --quiet
+          docker compose --profile public config --quiet
+      - name: Build and start actual containers
+        run: docker compose -f compose.yml -f compose.local.yml up -d --build --wait --wait-timeout 180
+      - name: Run PostgreSQL and pgvector acceptance tests
+        run: |
+          docker compose exec -T db createdb -U memoryhub memoryhub_test
+          docker compose exec -T \
+            -e TEST_DATABASE_URL="postgresql+psycopg://memoryhub:$POSTGRES_PASSWORD@db:5432/memoryhub_test" \
+            -e TEST_DATA_DIR=/tmp/memoryhub-test \
+            api python -m pytest -q
+      - name: Verify HTTP and persisted data across restart
+        run: |
+          docker compose exec -T api python - prepare < scripts/container_smoke.py
+          docker compose -f compose.yml -f compose.local.yml restart db api worker
+          docker compose exec -T api python - verify < scripts/container_smoke.py
+      - name: Validate HTTPS proxy configuration
+        run: docker compose --profile public run --rm --no-deps caddy caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile
+      - name: Diagnostics on failure
+        if: failure()
+        run: docker compose logs --tail 80 api worker migrate
+      - name: Remove CI containers and disposable volumes
+        if: always()
+        run: docker compose -f compose.yml -f compose.local.yml down --volumes --remove-orphans

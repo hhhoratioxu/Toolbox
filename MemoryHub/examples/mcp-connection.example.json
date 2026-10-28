@@ -1,0 +1,8 @@
+{
+  "transport": "streamable-http",
+  "url": "https://memory.example.com/mcp/",
+  "headers": {
+    "Authorization": "Bearer <由客户端密钥管理器注入的独立 Agent 令牌>"
+  },
+  "note": "这是传输配置示意，各客户端配置文件格式不同。请勿假定其支持环境变量替换。本版 PAT 不提供 OAuth 发现或授权码流程。"
+}

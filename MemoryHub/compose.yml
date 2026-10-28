@@ -1,0 +1,79 @@
+name: memory-hub
+x-app: &app
+  build: .
+  image: memory-hub:0.1.0
+  environment: &env
+    DATABASE_URL: postgresql+psycopg://memoryhub:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}@db:5432/memoryhub
+    DATA_DIR: /data
+    PUBLIC_URL: ${PUBLIC_URL:-https://memory.example.com}
+    COOKIE_SECURE: ${COOKIE_SECURE:-true}
+    MODEL_BASE_URL: ${MODEL_BASE_URL:-}
+    GENERATION_MODEL: ${GENERATION_MODEL:-}
+    EMBEDDING_MODEL: ${EMBEDDING_MODEL:-}
+    MODEL_EXTERNAL: ${MODEL_EXTERNAL:-false}
+  volumes:
+    - memory_data:/data
+  networks: [internal, egress]
+  security_opt: [no-new-privileges:true]
+  cap_drop: [ALL]
+  restart: unless-stopped
+
+services:
+  db:
+    image: pgvector/pgvector:0.8.7-pg17-bookworm@sha256:ac08538c6f8b9904c33c8224c5e5706dbe760aca29db1d096972b4052c22a75d
+    environment:
+      POSTGRES_DB: memoryhub
+      POSTGRES_USER: memoryhub
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD}
+      POSTGRES_INITDB_ARGS: --auth-host=scram-sha-256
+    volumes: [postgres_data:/var/lib/postgresql/data]
+    networks: [internal]
+    restart: unless-stopped
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -U memoryhub -d memoryhub']
+      interval: 5s
+      timeout: 3s
+      retries: 20
+  migrate:
+    <<: *app
+    command: [alembic, upgrade, head]
+    restart: 'no'
+    depends_on:
+      db: {condition: service_healthy}
+  api:
+    <<: *app
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+    healthcheck:
+      test: [CMD, python, -c, 'import urllib.request; urllib.request.urlopen(urllib.request.Request("http://127.0.0.1:8000/healthz", headers={"Host": __import__("urllib.parse", fromlist=["urlparse"]).urlparse(__import__("os").environ["PUBLIC_URL"]).netloc}))']
+      interval: 20s
+      timeout: 5s
+      retries: 5
+  worker:
+    <<: *app
+    command: [python, -m, app.worker]
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+  caddy:
+    image: caddy:2.10.2-alpine@sha256:4c6e91c6ed0e2fa03efd5b44747b625fec79bc9cd06ac5235a779726618e530d
+    profiles: [public]
+    environment:
+      MEMORY_DOMAIN: ${MEMORY_DOMAIN:-memory.example.com}
+      ACME_EMAIL: ${ACME_EMAIL:-admin@example.com}
+    ports: ['80:80', '443:443', '443:443/udp']
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks: [egress]
+    restart: unless-stopped
+    depends_on: [api]
+
+networks:
+  internal: {internal: true}
+  egress: {}
+volumes:
+  postgres_data: {}
+  memory_data: {}
+  caddy_data: {}
+  caddy_config: {}

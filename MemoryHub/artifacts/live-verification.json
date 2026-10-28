@@ -1,0 +1,28 @@
+{
+  "http_client_A_to_mcp_client_B": true,
+  "web_correction_read_back": true,
+  "source_verified": true,
+  "new_session_context": true,
+  "client_acknowledged": true,
+  "memory_id": "44f799a6-f91a-4ce3-934c-7a1ade41351d",
+  "version": 3,
+  "budget": {
+    "limit": 4000,
+    "used": 1518,
+    "estimated": true,
+    "method": "UTF-8 字节数保守估算；不含 API 元数据和客户端包装",
+    "truncated": false
+  },
+  "tools": [
+    "get_context",
+    "search_memories",
+    "get_memory",
+    "list_projects",
+    "get_project_context",
+    "propose_memory",
+    "ingest_event",
+    "update_memory",
+    "get_source_fragment",
+    "acknowledge_context"
+  ]
+}

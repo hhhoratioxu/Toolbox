@@ -1,0 +1,13 @@
+{
+	email {$ACME_EMAIL}
+}
+{$MEMORY_DOMAIN} {
+	encode zstd gzip
+	header Strict-Transport-Security "max-age=31536000; includeSubDomains"
+	request_body {
+		max_size 8MB
+	}
+	reverse_proxy api:8000 {
+		flush_interval -1
+	}
+}

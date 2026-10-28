@@ -1,0 +1,11 @@
+{
+  "memories": 2,
+  "sources": 3,
+  "revisions": 4,
+  "projects": 1,
+  "personas": 1,
+  "settings": 1,
+  "search_indexes": 2,
+  "all_agent_credentials_revoked": true,
+  "fresh_database_cli_restore": true
+}

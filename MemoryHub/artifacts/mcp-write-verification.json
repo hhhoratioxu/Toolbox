@@ -1,0 +1,7 @@
+{
+  "mcp_ingest_event": true,
+  "mcp_propose_memory": true,
+  "mcp_idempotent_retry": true,
+  "candidate_status": "candidate",
+  "source_id": "6546da59-b5d6-49f2-9870-fa5eae06b2b1"
+}

@@ -1,0 +1,13 @@
+{
+  "type_check_and_frontend_build": "passed",
+  "compose_local_config": "passed",
+  "compose_public_profile_config": "passed",
+  "caddy_adapt_validate": "passed",
+  "container_build_runtime": "not tested: no Docker daemon",
+  "public_https": "not tested: no domain/server connection",
+  "real_model_success": "not tested: no model endpoint supplied",
+  "controlled_model_extraction_and_vector_math": "passed in PostgreSQL acceptance tests",
+  "acceptance_tests": 20,
+  "browser_mobile_content_width": 375,
+  "browser_mobile_scroll_width": 375
+}

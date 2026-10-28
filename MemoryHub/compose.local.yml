@@ -1,0 +1,10 @@
+services:
+  api:
+    ports: ['127.0.0.1:8765:8000']
+    environment:
+      PUBLIC_URL: http://127.0.0.1:8765
+      COOKIE_SECURE: 'false'
+  worker:
+    environment:
+      PUBLIC_URL: http://127.0.0.1:8765
+      COOKIE_SECURE: 'false'

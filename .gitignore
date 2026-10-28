@@ -1,0 +1,15 @@
+.DS_Store
+**/.env
+**/.env.local
+**/.local/
+**/.venv/
+**/node_modules/
+**/dist/
+**/__pycache__/
+**/.pytest_cache/
+**/*.pyc
+**/*.tsbuildinfo
+**/data/
+**/backups/
+**/artifacts/*.log
+**/artifacts/private*

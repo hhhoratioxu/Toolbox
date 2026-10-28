@@ -1,0 +1,15 @@
+.env
+.env.local
+.venv/
+.local/
+__pycache__/
+.pytest_cache/
+*.pyc
+node_modules/
+frontend/dist/
+*.tsbuildinfo
+data/
+backups/
+artifacts/*.log
+artifacts/private*
+.DS_Store
