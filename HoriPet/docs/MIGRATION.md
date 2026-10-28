@@ -9,3 +9,7 @@ On 2026-10-28 HoriPet moved into `hhhoratioxu/Toolbox`, under `HoriPet/`. The pr
 - The monorepo workflow is `.github/workflows/horipet.yml` at the Toolbox root. It works from `HoriPet/`, uses the project lockfile and isolates artifact names and release tags.
 
 Run development commands from `Toolbox/HoriPet`; existing installed apps and local pet saves do not need to move.
+
+## Migration verification
+
+On 2026-10-28 the migrated project passed all 42 local Vitest tests and its TypeScript/production build. The [Toolbox HoriPet workflow](https://github.com/hhhoratioxu/Toolbox/actions/runs/40636935714) passed all four platform build jobs, including packaged desktop checks for macOS ARM64, macOS Intel and Windows x64. Windows ARM64 remains a cross-build, without a native device run. The published migrated release contains all nine original files with identical sizes and SHA256 digests.

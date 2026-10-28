@@ -116,7 +116,7 @@ tests/                       逻辑测试
 scripts/                     图标生成与真实桌面检查
 resources/                   内置图标、托盘素材
 docs/                        架构、验收与发布说明
-.github/workflows/           双平台构建与发布
+../.github/workflows/horipet.yml  双平台构建与发布（Toolbox 根目录）
 ```
 
 源码及原创角色按 [MIT](LICENSE) 开源。Electron、React、Zustand 等依赖保留各自许可，见 [第三方声明](THIRD_PARTY_NOTICES.md)。
