@@ -1,0 +1,71 @@
+{
+  "platform": "win32",
+  "arch": "x64",
+  "packaged": true,
+  "timestamp": "2026-10-19T09:21:00.869Z",
+  "checks": [
+    {
+      "name": "First launch renders a real Electron companion",
+      "passed": true
+    },
+    {
+      "name": "Transparent frameless compact window, focus and renderer sandbox",
+      "passed": true
+    },
+    {
+      "name": "Click and double-click produce a real state transition",
+      "passed": true
+    },
+    {
+      "name": "Feeding, manual sleep and waking work through secure IPC",
+      "passed": true
+    },
+    {
+      "name": "Invalid settings and arbitrary actions are rejected",
+      "passed": true
+    },
+    {
+      "name": "Pet can be hidden, shown and recovered into a screen work area",
+      "passed": true
+    },
+    {
+      "name": "Native OS click passes through a transparent corner",
+      "passed": true
+    },
+    {
+      "name": "Native OS click reaches the cat without stealing keyboard focus",
+      "passed": true
+    },
+    {
+      "name": "Native OS drag moves the compact window and restores animation",
+      "passed": true
+    },
+    {
+      "name": "Native cursor follow starts, moves, and rests after cursor leaves",
+      "passed": true
+    },
+    {
+      "name": "Preferences open, live changes apply, and closing keeps the pet alive",
+      "passed": true
+    },
+    {
+      "name": "Core functionality works with the renderer offline",
+      "passed": true
+    },
+    {
+      "name": "Normal quit flushes data and leaves no live Electron child processes",
+      "passed": true
+    },
+    {
+      "name": "Relaunch restores settings, pet data and a safe saved position",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "captureBackend": "Electron capturePage",
+  "processCleanup": {
+    "checkedCount": 5,
+    "allExited": true
+  },
+  "relaunchQuit": true
+}

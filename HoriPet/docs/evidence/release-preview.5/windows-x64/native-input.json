@@ -1,0 +1,37 @@
+{
+  "platform": "win32",
+  "driver": "SetCursorPos + SendInput",
+  "checks": [
+    "transparent corner receives a real OS click in underlying window",
+    "cat reacts, underlying click count unchanged, keyboard focus retained",
+    {
+      "dragBefore": {
+        "x": 720,
+        "y": 424,
+        "width": 240,
+        "height": 268
+      },
+      "dragAfter": {
+        "x": 625,
+        "y": 359,
+        "width": 240,
+        "height": 268
+      }
+    },
+    {
+      "followingBefore": {
+        "x": 690,
+        "y": 371,
+        "width": 240,
+        "height": 268
+      },
+      "followingAfter": {
+        "x": 620,
+        "y": 330,
+        "width": 240,
+        "height": 268
+      },
+      "left": "idle after expiry"
+    }
+  ]
+}

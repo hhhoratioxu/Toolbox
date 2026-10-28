@@ -1,0 +1,47 @@
+[
+  {
+    "name": "HoriPet-0.1.0-mac-arm64.dmg",
+    "sha256": "9fef658b285995f468df79ba0dcdee957fe84025b7dba9ebb396ea868e90a41d",
+    "bytes": 128436993
+  },
+  {
+    "name": "HoriPet-0.1.0-mac-arm64.zip",
+    "sha256": "ceba51850121bce69692670e90120edf6e15ecc06c7c5e3615d9efc889a56a76",
+    "bytes": 128348287
+  },
+  {
+    "name": "HoriPet-0.1.0-mac-x64.dmg",
+    "sha256": "5e62423ee161ccf6fe7a862d5587b068240b7505ae3dbb985ffbc1bbd5d3ba65",
+    "bytes": 132188313
+  },
+  {
+    "name": "HoriPet-0.1.0-mac-x64.zip",
+    "sha256": "ed2106ac8568601da3f275efda90c2065ab08635533fe6e76974c26a6264fe34",
+    "bytes": 132156441
+  },
+  {
+    "name": "HoriPet-0.1.0-windows-arm64-portable.exe",
+    "sha256": "959e9e015fdd8380bc4098c3c5e94d3d8d633c8891b2d0f3252099ddf1741555",
+    "bytes": 105164372
+  },
+  {
+    "name": "HoriPet-0.1.0-windows-arm64-setup.exe",
+    "sha256": "0166ff67275a2e88a6d6469cca75051c1ae66a8273c83392b6e48f88ee52e945",
+    "bytes": 105391015
+  },
+  {
+    "name": "HoriPet-0.1.0-windows-x64-portable.exe",
+    "sha256": "ea3fe2d6063ad8ec599caef5ce2eada08a23bb832334192f8becc1ddad1f9c60",
+    "bytes": 111474711
+  },
+  {
+    "name": "HoriPet-0.1.0-windows-x64-setup.exe",
+    "sha256": "ff7648630a7cd63436ce56ceec29ae0b40bcd687848180d55dd0dd418f0c610a",
+    "bytes": 111701725
+  },
+  {
+    "name": "SHA256SUMS.txt",
+    "sha256": "8af208f87ddfa159e82c506c62d55f6b97ce5f6de5ba14cf254cf4a74c8e7dab",
+    "bytes": 806
+  }
+]

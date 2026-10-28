@@ -1,7 +1,7 @@
 <p align="center"><img src="resources/icon.png" width="116" alt="HoriPet original white cat" /></p>
 <h1 align="center">HoriPet</h1>
 <p align="center">一点点，温柔的陪伴。<br/>A little company for your desktop.</p>
-<p align="center"><a href="https://github.com/hhhoratioxu/HoriPet/releases">下载预览版 / Downloads</a> · <a href="docs/VALIDATION.md">验证记录</a> · <a href="docs/ARCHITECTURE.md">Architecture</a></p>
+<p align="center"><a href="https://github.com/hhhoratioxu/Toolbox/releases/tag/horipet-v0.1.0-preview.5">下载预览版 / Downloads</a> · <a href="docs/VALIDATION.md">验证记录</a> · <a href="docs/ARCHITECTURE.md">Architecture</a></p>
 
 HoriPet 是真正运行在桌面上的 Electron 宠物应用，支持 macOS 和 Windows。原创 SVG 小猫直接内置在应用中，透明小窗口不占满屏幕；核心功能完全离线，无账号、遥测或付费 API。
 
@@ -22,7 +22,7 @@ HoriPet 是真正运行在桌面上的 Electron 宠物应用，支持 macOS 和 
 
 ## 安装预览版
 
-从 [Releases](https://github.com/hhhoratioxu/HoriPet/releases) 选择对应架构：
+从 [Releases](https://github.com/hhhoratioxu/Toolbox/releases/tag/horipet-v0.1.0-preview.5) 选择对应架构：
 
 | 电脑 | 文件 |
 | --- | --- |
@@ -42,6 +42,8 @@ Mac 打开 DMG 后将 HoriPet 拖到 Applications。Windows 安装程序按当�
 需要 Node.js 24+ 和 pnpm 11.25.0；开发依赖会下载对应系统的 Electron。
 
 ```sh
+git clone https://github.com/hhhoratioxu/Toolbox.git
+cd Toolbox/HoriPet
 corepack enable
 corepack prepare pnpm@11.25.0 --activate
 pnpm install --frozen-lockfile
@@ -57,7 +59,7 @@ pnpm start            # 启动生产代码，先执行 build
 pnpm test:desktop     # 在当前系统上实际启动 Electron 做桌面自动化检查
 ```
 
-`test:desktop` 使用独立 `.test-profile-smoke`，不会覆盖正常存档。报告和截图保存在 `test-results/<platform>-<arch>/`，不包含在消费者安装包中。需要可用的图形桌面会话。
+`test:desktop` 使用独立 `.test-profile-smoke-*`，不会覆盖正常存档。报告和截图保存在 `test-results/<platform>-<arch>/`，不包含在消费者安装包中。需要可用的图形桌面会话。
 
 Windows 桌面检查包括真实系统鼠标输入。Mac 的原生鼠标测试需要用户明确授权后编译并指定 `scripts/native-mouse.swift` 生成的驱动（`HORIPET_MOUSE_DRIVER`）；普通测试不会尝试获取辅助功能权限。`scripts/profile-idle.mjs` 可对真实运行的应用做短时资源采样。实际测试结果和 Electron 内存开销已记录在验证文档中。
 
@@ -81,7 +83,7 @@ pnpm dist:win:arm64
 
 输出位于 `dist/`。macOS 包应在 Mac 上构建，Windows 安装程序应在 Windows 上构建。GitHub Actions 对两种 Mac 架构和两种 Windows 架构分别构建、运行测试并上传产物；可运行对应架构的 runner 还会实际启动打包后的应用。Windows ARM64 在 x64 runner 交叉打包，不能据此宣称在 ARM 设备上运行通过。
 
-推送 `v*` 标签会在全部构建成功后创建 GitHub 预览版并上传安装包和 SHA256 校验文件。当前签名配置明确保持未签名，不需要证书或付费 API。
+推送 `horipet-v*` 标签会在全部构建成功后创建 GitHub 预览版并上传安装包和 SHA256 校验文件。当前签名配置明确保持未签名，不需要证书或付费 API。
 
 ## 本地数据与隐私
 

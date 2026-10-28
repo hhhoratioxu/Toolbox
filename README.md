@@ -5,6 +5,7 @@
 | 工具 | 用途 | 状态 |
 |---|---|---|
 | [Memory Hub](MemoryHub/) | 部署在私人服务器上的 AI 长期记忆中心：中文管理界面、项目与人格、授权检索、HTTP / MCP、候选审核、来源与版本、备份恢复 | v0.1.0；本机闭环与 Linux 容器验证通过，详见验收报告 |
+| [HoriPet](HoriPet/) | macOS / Windows 桌面宠物：原创白猫、透明交互、本地养成与中英文设置 | [v0.1.0-preview.5 安装包](https://github.com/hhhoratioxu/Toolbox/releases/tag/horipet-v0.1.0-preview.5)；保留原始验收报告，Windows ARM64 仅交叉构建 |
 
 ## Memory Hub
 
@@ -32,3 +33,10 @@ docker compose exec api python -m app.cli init --username admin
 新增工具时建立独立目录，并在上表登记用途、运行入口和验证边界。各工具的许可证以对应目录为准；Memory Hub 的原创代码采用 MIT。
 
 [容器构建与核心验收的 GitHub Actions 记录](https://github.com/hhhoratioxu/Toolbox/actions/runs/40634037134)。公网部署和模型效果的尚未验证部分均列在限制清单中。
+
+## HoriPet
+
+- [源码与本地启动](HoriPet/README.md)
+- [macOS / Windows 安装包](https://github.com/hhhoratioxu/Toolbox/releases/tag/horipet-v0.1.0-preview.5)
+- [验证记录与限制](HoriPet/docs/VALIDATION.md)
+- [迁移与原始发布校验](HoriPet/docs/MIGRATION.md)

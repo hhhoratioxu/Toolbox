@@ -27,7 +27,7 @@ TypeScript checking and the production Electron/Vite build are executed before p
 
 Playwright-delivered mouse events exercise the live renderer and IPC. They **do not alone establish native OS mouse delivery, native drag movement or transparent-region click-through**. Those require separate OS input checks. Captured PNG alpha proves the rendered surface, not every external compositor or graphics driver.
 
-Windows x64 adds genuine OS input using `SetCursorPos` and `SendInput` in the Windows runner; all four native checks passed in [release run 39229117084](https://github.com/hhhoratioxu/HoriPet/actions/runs/39229117084/job/117982515629). That runner also passed 14 desktop checks with the packaged EXE. These are Windows hosted-runner results, not physical Windows 10/11 device acceptance. Release v0.1.0-preview.5 passed all four platform jobs. Both Mac jobs passed 10 live desktop checks; Windows x64 passed 14 including native OS input. Windows ARM64 was cross-built without a native ARM device run. The release workflow publishes eight installers/archives and SHA256SUMS.txt after all jobs succeed.
+Windows x64 adds genuine OS input using `SetCursorPos` and `SendInput` in the Windows runner; all four native checks passed in [archived release-run evidence](evidence/release-preview.5/README.md). That runner also passed 14 desktop checks with the packaged EXE. These are Windows hosted-runner results, not physical Windows 10/11 device acceptance. Release v0.1.0-preview.5 passed all four platform jobs. Both Mac jobs passed 10 live desktop checks; Windows x64 passed 14 including native OS input. Windows ARM64 was cross-built without a native ARM device run. The release workflow publishes eight installers/archives and SHA256SUMS.txt after all jobs succeed.
 
 On virtual macOS GPUs, native `capturePage` can return `UnknownVizError` before a capture surface is available. The test retries a bounded number of times, then records an explicit live Chromium-renderer capture fallback if needed. It does not wait indefinitely on animation frames that an occluded virtual window is allowed to suspend. The capture method is included in the JSON report, so it is not confused with physical compositor acceptance.
 
@@ -55,3 +55,7 @@ Quit acceptance uses the application's actual preload/IPC Quit action, with a te
 7. Quit normally and inspect the process tree. Restart and verify the latest saved values. Confirm no app HTTP requests are needed.
 
 Record the OS, CPU architecture, scaling, displays, exact artifact SHA256 and evidence for every claimed pass. Leave unexecuted items marked unverified.
+
+## Repository migration, 2026-10-28
+
+HoriPet is now maintained in [Toolbox/HoriPet](https://github.com/hhhoratioxu/Toolbox/tree/main/HoriPet). Original Actions evidence is preserved under `docs/evidence/release-preview.5/`; those reports remain historical 2026-10-19 acceptance and are not new hardware tests. See [migration provenance](MIGRATION.md) for the original commit history and unchanged release-asset digests.

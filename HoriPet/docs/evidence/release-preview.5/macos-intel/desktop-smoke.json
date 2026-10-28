@@ -1,0 +1,56 @@
+{
+  "platform": "darwin",
+  "arch": "x64",
+  "packaged": true,
+  "timestamp": "2026-10-19T09:21:49.794Z",
+  "checks": [
+    {
+      "name": "First launch renders a real Electron companion",
+      "passed": true
+    },
+    {
+      "name": "Transparent frameless compact window, focus and renderer sandbox",
+      "passed": true
+    },
+    {
+      "name": "Click and double-click produce a real state transition",
+      "passed": true
+    },
+    {
+      "name": "Feeding, manual sleep and waking work through secure IPC",
+      "passed": true
+    },
+    {
+      "name": "Invalid settings and arbitrary actions are rejected",
+      "passed": true
+    },
+    {
+      "name": "Pet can be hidden, shown and recovered into a screen work area",
+      "passed": true
+    },
+    {
+      "name": "Preferences open, live changes apply, and closing keeps the pet alive",
+      "passed": true
+    },
+    {
+      "name": "Core functionality works with the renderer offline",
+      "passed": true
+    },
+    {
+      "name": "Normal quit flushes data and leaves no live Electron child processes",
+      "passed": true
+    },
+    {
+      "name": "Relaunch restores settings, pet data and a safe saved position",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "ciRendering": "Background throttling disabled for hosted-macOS test windows only",
+  "captureBackend": "Electron capturePage",
+  "processCleanup": {
+    "checkedCount": 4,
+    "allExited": true
+  },
+  "relaunchQuit": true
+}
