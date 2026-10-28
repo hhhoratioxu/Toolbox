@@ -111,7 +111,7 @@ public/examples/                  可下载的原生示例文本
 
 执行 `pnpm test` 可复现必要的正确性检查，包括用户列出的十项验收场景；另有远程 HTTP / 格式 / 取消 / 超时 / 大小限制、CSV 注入保护，以及 10 万条规则解析和索引匹配回归。
 
-浏览器验收步骤与证据边界见 [VERIFICATION.md](docs/VERIFICATION.md)。原文查看器示例：
+浏览器验收步骤与证据边界见 [VERIFICATION.md](docs/VERIFICATION.md)，已完成的 GitHub Pages 与线上 Raw 导入检查见 [发布记录](docs/DEPLOYMENT.md)。原文查看器示例：
 
 ![原文定位及引用链](docs/images/source-viewer.jpg)
 

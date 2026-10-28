@@ -65,6 +65,6 @@ node scripts/qa-server.mjs
 
 ## GitHub Pages 与客户端边界
 
-仓库根目录 `.github/workflows/pages.yml` 包含锁定依赖安装、91 项测试、TypeScript 与生产构建、与既有站点共同发布。实际运行状态以 [Pages workflow](https://github.com/hhhoratioxu/Toolbox/actions/workflows/pages.yml) 为准；在线入口为 [Rule Finder](https://hhhoratioxu.github.io/Toolbox/RuleFinder/)。发布后还需核对网页与 Worker 能否实际运行，不将上传源码或构建产物本身当作部署成功。
+仓库根目录 `.github/workflows/pages.yml` 包含锁定依赖安装、91 项测试、TypeScript 与生产构建、与既有站点共同发布。实际运行状态以 [Pages workflow](https://github.com/hhhoratioxu/Toolbox/actions/workflows/pages.yml) 为准；在线入口为 [Rule Finder](https://hhhoratioxu.github.io/Toolbox/RuleFinder/)。已完成网页、Worker、线上 GitHub Raw 导入、L3 原文定位与静态策略组的实际检查，具体提交和成功的工作流见 [DEPLOYMENT.md](DEPLOYMENT.md)，没有仅凭上传源码或生成构建产物宣称部署成功。
 
 没有执行真实 Loon / Surge / Mihomo 客户端、物理手机、网络连接、自动选择节点或真实 DNS 解析验收。本项目只声称上述本地静态解析与浏览器操作的验证范围。
