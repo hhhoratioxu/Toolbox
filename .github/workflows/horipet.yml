@@ -1,0 +1,90 @@
+name: HoriPet desktop builds
+on:
+  push:
+    branches: [main]
+    paths: ['HoriPet/**', '.github/workflows/horipet.yml']
+    tags: ['horipet-v*']
+  pull_request:
+    paths: ['HoriPet/**', '.github/workflows/horipet.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: horipet-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  desktop:
+    name: HoriPet / ${{ matrix.label }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { os: macos-latest, label: macOS ARM64, command: 'dist:mac:arm64', app: 'dist/mac-arm64/HoriPet.app/Contents/MacOS/HoriPet', smoke: true }
+          - { os: macos-15-intel, label: macOS Intel, command: 'dist:mac:x64', app: 'dist/mac/HoriPet.app/Contents/MacOS/HoriPet', smoke: true }
+          - { os: windows-latest, label: Windows x64, command: 'dist:win:x64', app: 'dist/win-unpacked/HoriPet.exe', smoke: true }
+          - { os: windows-latest, label: Windows ARM64 cross-build, command: 'dist:win:arm64', app: '', smoke: false }
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: HoriPet
+    env:
+      CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 11.25.0
+          package_json_file: HoriPet/package.json
+          run_install: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: pnpm
+          cache-dependency-path: HoriPet/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test
+      - run: pnpm ${{ matrix.command }}
+      - name: Run the packaged HoriPet app
+        if: matrix.smoke
+        run: pnpm test:packaged
+        env:
+          HORIPET_APP: ${{ github.workspace }}/HoriPet/${{ matrix.app }}
+      - name: Upload HoriPet installers
+        uses: actions/upload-artifact@v7
+        with:
+          name: HoriPet-installers-${{ strategy.job-index }}
+          if-no-files-found: error
+          path: |
+            HoriPet/dist/*.dmg
+            HoriPet/dist/*.zip
+            HoriPet/dist/*.exe
+      - name: Upload HoriPet desktop verification
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: HoriPet-desktop-evidence-${{ strategy.job-index }}
+          path: HoriPet/test-results/
+          if-no-files-found: ignore
+  release:
+    name: Publish HoriPet unsigned preview
+    if: startsWith(github.ref, 'refs/tags/horipet-v')
+    needs: desktop
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: HoriPet-installers-*
+          path: release-assets
+          merge-multiple: true
+      - name: Publish HoriPet installers and checksums
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd release-assets
+          sha256sum ./* > SHA256SUMS.txt
+          version="${GITHUB_REF_NAME#horipet-}"
+          gh release create "$GITHUB_REF_NAME" ./* --repo "$GITHUB_REPOSITORY" --title "HoriPet $version · Preview" --notes-file ../HoriPet/docs/RELEASE-NOTES.md --prerelease --verify-tag
