@@ -31,7 +31,20 @@
 8. 再点击「更新规则库」，完成公开目录检查，未改变文件无需重新下载。更新中按钮切为可取消状态。
 9. 390 × 844 手机视口检查目录与生成器，文档没有水平溢出；底部添加、ZIP、模拟和下载按钮保持可见。
 
-线上发布检查在部署完成后记录。目录新增 / 修改 / 删除的组合行为通过自动测试验证；没有向正式规则目录添加假的服务来制造更新演示。
+目录新增 / 修改 / 删除的组合行为通过自动测试验证；没有向正式规则目录添加假的服务来制造更新演示。
+
+## 已完成的线上发布检查
+
+- 正式地址：[Rule Finder](https://hhhoratioxu.github.io/Toolbox/RuleFinder/)，实际显示版本 1.1。
+- 应用提交：[f57bd44](https://github.com/hhhoratioxu/Toolbox/commit/f57bd44a5e45e363f2c1889514401c7babc042ec)。本地 Git tree 与 GitHub 新 tree 一致；目录、生成器、App 和 package.json 通过固定提交 Raw 逐字节核对。
+- Pages 工作流：[40719372062](https://github.com/hhhoratioxu/Toolbox/actions/runs/40719372062)，`build` 与 `deploy` 均为 `success`，包括 Rule Finder 的测试和构建步骤。
+- 在正式 HTTPS 网站实际打开规则库，先显示快照与加载状态，随后读取公开目录，显示 `82b0fd4`、26 分类、156 文件。
+- 在线选择 AI、Parsec 并添加，工作区加载 974 条规则；查询 `api.parsec.app` 命中 Parsec.lsr L15，独立规则显示「未提供策略绑定」，原文 GitHub 链接固定到已加载提交。
+- 在线将 AI 绑定到「节点选择」，复制 Surge 配置后核对剪贴板；实际下载六端 ZIP，解包确认六个配置加说明，两个 YAML 均可解析，各自使用正确的原生 main 规则地址。
+- 在线把生成的 Loon 配置放入模拟，自动选中新主配置。Parsec 规则确定采用 DIRECT，路径包含主配置 L20 与 Parsec.lsr L15；后续 FINAL 解释为已有更早匹配。浏览器错误日志为空。
+- 已添加规则后再次检查目录，提示新增 / 修改 / 移除均为 0，已添加来源更新 0、失败 0；相同 blob 未重复下载。
+
+![正式网站的动态规则库](images/live-library.jpg)
 
 ## 未验证的范围
 

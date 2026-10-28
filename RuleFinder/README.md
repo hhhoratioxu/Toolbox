@@ -33,6 +33,8 @@ v1.1 接入 [hhhoratioxu/Proxy](https://github.com/hhhoratioxu/Proxy) 的六客�
 
 旧版本手动添加的 `hhhoratioxu/Proxy/main/Loon/rule/…` Raw 来源也可纳入此更新流程。其他仓库、固定提交 URL 和手动替代的其他订阅不被当作该仓库的实时规则。现有用户来源的启用状态在更新时保留。
 
+![实时规则库与更新入口](docs/images/live-library.jpg)
+
 ## 生成代理配置
 
 在「生成配置」中，使用已选分类生成 **Loon、Surge、Clash / Mihomo、Egern、Quantumult X、Shadowrocket** 的各自原生配置或分流片段。可以设置分类策略、顺序、兜底策略，并下载当前客户端文件、复制预览或下载六端 ZIP。Loon 完整配置可直接「放入配置模拟」，同时载入其依赖并选中新的主配置。
