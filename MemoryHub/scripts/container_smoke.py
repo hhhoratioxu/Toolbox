@@ -40,8 +40,9 @@ if sys.argv[1] == 'prepare':
     memory = client.post('/api/memories', headers={'Idempotency-Key': 'ci-memory'}, json={
         'category': 'project', 'title': '容器重启验证', 'body': '验收数据：重启容器后保留项目和最新记忆。', 'project_id': project.json()['id']})
     memory.raise_for_status()
+    record = memory.json()['memory']
     proof.touch(mode=0o600, exist_ok=False)
-    proof.write_text(json.dumps({'password': password, 'memory_id': memory.json()['id'], 'version': memory.json()['version']}))
+    proof.write_text(json.dumps({'password': password, 'memory_id': record['id'], 'version': record['version']}))
     print('Actual HTTP create and login passed')
 else:
     memory = client.get('/api/memories/' + state['memory_id'])

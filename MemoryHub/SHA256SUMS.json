@@ -76,7 +76,7 @@
   "frontend/src/vite-env.d.ts": "65996936fbb042915f7b74a200fcdde7e410f32a669b1ab9597cfaa4b0faddb5",
   "frontend/tsconfig.json": "7461a89bf63a32f75fe149f44214931a31a2e11e6ab4a1fd63faacae91393ef6",
   "frontend/vite.config.ts": "0f8691b4c6411afb1ce2a468ba746255251d6a6c5accd893b0a620eefab1ddec",
-  "scripts/container_smoke.py": "d881afdab347a53380f6e86ecd17cf5b41c57bc179c17fea66f15ac9cf62518c",
+  "scripts/container_smoke.py": "b8660251e964e35a7449b86f2d7046219b3dde7014b6ee3fa66faee2d453d33d",
   "scripts/dev-start.sh": "ad7231ef88e40b6e6efcd63e4eade2ec514f13e02f1996e5744a8479a21426f6",
   "scripts/dev-stop.sh": "7768fce9b5d7cdd145cd008b8552e9064e1edb89a2025e0ff97287e10c31ce43",
   "scripts/live_acceptance.py": "828c57e01651c1d9f561dfd9adee7721855e140cf5deaf66f335f49ff8a215f8",
