@@ -1,0 +1,50 @@
+[
+  {
+    "project": "desktop-chromium",
+    "attachment": {
+      "name": "renderer-observations",
+      "contentType": "application/json",
+      "body": "{\"fps\":\"3\",\"drawCalls\":\"363\"}"
+    }
+  },
+  {
+    "project": "desktop-chromium",
+    "attachment": {
+      "name": "console-errors",
+      "contentType": "application/json",
+      "body": "[]"
+    }
+  },
+  {
+    "project": "mobile-chromium",
+    "attachment": {
+      "name": "renderer-observations",
+      "contentType": "application/json",
+      "body": "{\"fps\":\"8\",\"drawCalls\":\"229\"}"
+    }
+  },
+  {
+    "project": "mobile-chromium",
+    "attachment": {
+      "name": "console-errors",
+      "contentType": "application/json",
+      "body": "[]"
+    }
+  },
+  {
+    "project": "mobile-webkit",
+    "attachment": {
+      "name": "renderer-observations",
+      "contentType": "application/json",
+      "body": "{\"fps\":\"60\",\"drawCalls\":\"229\"}"
+    }
+  },
+  {
+    "project": "mobile-webkit",
+    "attachment": {
+      "name": "console-errors",
+      "contentType": "application/json",
+      "body": "[]"
+    }
+  }
+]

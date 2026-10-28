@@ -1,0 +1,108 @@
+{
+  "metadata": {
+    "actualWorkers": 1
+  },
+  "startTime": 1792388960763,
+  "duration": 92803.52,
+  "files": [
+    {
+      "fileId": "12948a1c8bc2a97af126",
+      "fileName": "polish.spec.ts",
+      "tests": [
+        {
+          "testId": "12948a1c8bc2a97af126-d4660f27cdcadad82057",
+          "title": "final layout, saved-progress entry, focused-input Escape and help remain usable",
+          "projectName": "desktop-chromium",
+          "location": {
+            "file": "polish.spec.ts",
+            "line": 3,
+            "column": 1
+          },
+          "duration": 48989,
+          "annotations": [],
+          "tags": [],
+          "outcome": "expected",
+          "path": [],
+          "ok": true,
+          "results": [
+            {
+              "attachments": [],
+              "startTime": "2026-10-19T05:49:21.069Z",
+              "workerIndex": 0
+            }
+          ]
+        },
+        {
+          "testId": "12948a1c8bc2a97af126-95711aa59e2d90e5b620",
+          "title": "final layout, saved-progress entry, focused-input Escape and help remain usable",
+          "projectName": "mobile-chromium",
+          "location": {
+            "file": "polish.spec.ts",
+            "line": 3,
+            "column": 1
+          },
+          "duration": 30331,
+          "annotations": [],
+          "tags": [],
+          "outcome": "expected",
+          "path": [],
+          "ok": true,
+          "results": [
+            {
+              "attachments": [],
+              "startTime": "2026-10-19T05:50:10.686Z",
+              "workerIndex": 1
+            }
+          ]
+        },
+        {
+          "testId": "12948a1c8bc2a97af126-0abd294f7587337c38d6",
+          "title": "final layout, saved-progress entry, focused-input Escape and help remain usable",
+          "projectName": "mobile-webkit",
+          "location": {
+            "file": "polish.spec.ts",
+            "line": 3,
+            "column": 1
+          },
+          "duration": 11631,
+          "annotations": [],
+          "tags": [],
+          "outcome": "expected",
+          "path": [],
+          "ok": true,
+          "results": [
+            {
+              "attachments": [],
+              "startTime": "2026-10-19T05:50:41.492Z",
+              "workerIndex": 2
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "total": 3,
+        "expected": 3,
+        "unexpected": 0,
+        "flaky": 0,
+        "skipped": 0,
+        "ok": true
+      }
+    }
+  ],
+  "projectNames": [
+    "desktop-chromium",
+    "mobile-chromium",
+    "mobile-webkit"
+  ],
+  "stats": {
+    "total": 3,
+    "expected": 3,
+    "unexpected": 0,
+    "flaky": 0,
+    "skipped": 0,
+    "ok": true
+  },
+  "errors": [],
+  "options": {},
+  "machines": []
+}

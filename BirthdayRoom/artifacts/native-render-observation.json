@@ -1,0 +1,10 @@
+{
+  "observedAt": "2026-10-19T13:46:00+08:00",
+  "surface": "in-app browser on the local Mac",
+  "mode": "overview",
+  "rollingWindowSeconds": 2,
+  "fps": 120,
+  "drawCalls": 524,
+  "method": "Read-only DOM inspection of renderer diagnostics through cua_repl",
+  "scope": "One local preview observation. This is not a cross-device benchmark or a guarantee of frame rate."
+}
