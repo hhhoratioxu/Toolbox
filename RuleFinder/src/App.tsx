@@ -17,6 +17,11 @@ import type { ViewerSelection } from './components/RuleViewer';
 import { SupportDialog } from './components/SupportDialog';
 import { ResultSummary, ResultTable, TextResults } from './components/Results';
 import { Modal } from './components/Shared';
+import { LibraryDialog } from './components/LibraryDialog';
+import { useCatalog } from './library/useCatalog';
+import { findEntry, rawURL, readCatalogRule, REPOSITORY, syncPlan, trackedPath } from './library/catalog';
+import type { CatalogFile, CatalogSnapshot } from './library/catalog';
+import type { GeneratedConfig, RuleChoice } from './library/generator';
 
 const MAX_SOURCES = 40; const MAX_TOTAL = 30 * 1024 * 1024;
 export default function App() {
@@ -31,6 +36,12 @@ export default function App() {
   const [importOpen, setImportOpen] = useState(false); const [replacementURL, setReplacementURL] = useState(''); const [supportOpen, setSupportOpen] = useState(false); const [viewer, setViewer] = useState<ViewerSelection>();
   const [error, setError] = useState(''); const [notice, setNotice] = useState(''); const [dependencyBusy, setDependencyBusy] = useState(false); const [confirmClear, setConfirmClear] = useState(false);
   const [theme, setTheme] = useState(() => { try { return localStorage.getItem('rf-theme') ?? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); } catch { return 'light'; } });
+  const catalog = useCatalog();
+  const [libraryTab, setLibraryTab] = useState<'catalog' | 'generate'>();
+  const [libraryChoices, setLibraryChoices] = useState<RuleChoice[]>([]);
+  const [librarySyncing, setLibrarySyncing] = useState(false);
+  const libraryLoads = useRef(new Set<string>());
+  const libraryOperation = useRef(0);
   const controllers = useRef(new Map<string, AbortController>()); const requestId = useRef(0); const queryRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null);
   const configs = sources.filter(s => s.format === 'loon-config'); const current = results[activeResult];
   const notify = useCallback((message: string) => setNotice(message), []);
@@ -38,7 +49,7 @@ export default function App() {
   useEffect(() => { let active = true; readSources().then(saved => { if (active) setUsers(saved.map(s => s.status === 'loading' ? { ...s, status: 'error', error: { kind: 'cancelled', message: '上次加载未完成，请重新加载。' } } : s)); }).catch(() => notify('浏览器存储不可用，当前会话仍可使用，但刷新后不会保存。')).finally(() => { if (active) setHydrated(true); }); return () => { active = false; }; }, [notify]);
   useEffect(() => { if (!hydrated) return; const timer = setTimeout(() => { void saveSources(users).catch(() => notify('本地缓存写入失败，当前数据仍可使用；可下载原文备份。')); }, 350); return () => clearTimeout(timer); }, [users, hydrated, notify]);
   useEffect(() => { if (!notice) return; const timer = setTimeout(() => setNotice(''), 5000); return () => clearTimeout(timer); }, [notice]);
-  useEffect(() => { setViewer(undefined); setConfigId(''); setActiveResult(0); }, [dataset]);
+  useEffect(() => { setViewer(undefined); setConfigId(id => sources.some(s => s.id === id && s.format === 'loon-config') ? id : ''); setActiveResult(0); }, [dataset]);
   useEffect(() => {
     const id = ++requestId.current; setQueryBusy(true);
     const compute = async () => {
@@ -69,7 +80,7 @@ export default function App() {
     checkCapacity(value.content, url);
     const source = await engineWorker.parse({ id: url ? `remote-${stableHash(url)}` : crypto.randomUUID(), name: value.name, content: value.content, url, kind: url ? 'subscription' : 'local', origin: 'paste', formatHint: value.hint });
     source.modified = !!url; upsertUser(source); setDataset('user'); setError('');
-    if (source.format === 'loon-config') setMode('simulate'); else if (!userRef.current.some(s => s.format === 'loon-config')) setMode('library');
+    if (source.format === 'loon-config') { setMode('simulate'); setConfigId(source.id); } else if (!userRef.current.some(s => s.format === 'loon-config')) setMode('library');
     notify(`已导入 ${source.rules.length} 条规则${source.references.length ? `，识别 ${source.references.length} 个引用` : ''}`);
   };
   const loadURL = async (rawURL: string, existing?: Source, dependencyKind?: Source['kind']): Promise<Source> => {
@@ -91,17 +102,93 @@ export default function App() {
       return failed;
     } finally { if (controllers.current.get(id) === controller) controllers.current.delete(id); }
   };
-  const onRemote = async (url: string) => { setDataset('user'); const s = await loadURL(url); if (s.error) throw new Error(s.error.message); if (s.format === 'loon-config') setMode('simulate'); else if (!userRef.current.some(item => item.format === 'loon-config')) setMode('library'); notify(`远程来源已加载：${s.rules.length} 条规则`); };
+  const onRemote = async (url: string) => { setDataset('user'); const s = await loadURL(url); if (s.error) throw new Error(s.error.message); if (s.format === 'loon-config') { setMode('simulate'); setConfigId(s.id); } else if (!userRef.current.some(item => item.format === 'loon-config')) setMode('library'); notify(`远程来源已加载：${s.rules.length} 条规则`); };
+  const loadLibraryFile = async (file: CatalogFile, snapshot: CatalogSnapshot, existing?: Source) => {
+    const url = rawURL(file); checkCapacity('', url);
+    const id = existing?.id ?? `remote-${stableHash(url)}`;
+    controllers.current.get(id)?.abort();
+    const controller = new AbortController(); controllers.current.set(id, controller); libraryLoads.current.add(id);
+    const placeholder: Source = existing ? { ...existing, status: 'loading', error: undefined } : {
+      id, name: file.path.split('/').at(-1)!, url, filename: file.path.split('/').at(-1), client: 'loon',
+      format: 'loon-rules', origin: 'remote', kind: 'subscription', content: '', rules: [], references: [], groups: [],
+      diagnostics: [], status: 'loading', enabled: true, demo: false,
+    };
+    upsertUser(placeholder);
+    try {
+      const content = await readCatalogRule(file, snapshot, controller.signal); checkCapacity(content, url);
+      const parsed = await engineWorker.parse({ id, name: placeholder.name, content, url, filename: placeholder.filename, origin: 'remote', kind: 'subscription' });
+      if (parsed.status !== 'ready') throw new LoadError('format', '仓库文件已下载，但不是当前支持的 Loon 规则格式');
+      parsed.enabled = existing?.enabled ?? true; parsed.modified = existing?.modified;
+      parsed.catalog = { repository: REPOSITORY, path: file.path, sha: file.sha, commit: snapshot.commit, state: 'current' };
+      if (controllers.current.get(id) === controller) upsertUser(parsed);
+      return parsed;
+    } catch (e) {
+      const failed: Source = { ...placeholder, status: 'error', error: { kind: e instanceof LoadError ? e.kind : 'format', message: e instanceof Error ? e.message : '规则更新失败' } };
+      if (controllers.current.get(id) === controller) upsertUser(failed);
+      return failed;
+    } finally { libraryLoads.current.delete(id); if (controllers.current.get(id) === controller) controllers.current.delete(id); }
+  };
+  const updateLibrary = async () => {
+    if (catalog.busy || librarySyncing) return;
+    const operation = ++libraryOperation.current; setLibrarySyncing(true);
+    try {
+      const { snapshot, delta } = await catalog.refresh();
+      let changed = 0, failed = 0, removed = 0;
+      const plan = syncPlan(userRef.current, snapshot);
+      for (const item of plan.filter(p => p.action === 'removed')) {
+        upsertUser({ ...item.source, status: 'error', error: { kind: 'http', message: '此来源已从最新仓库目录移除，旧原文仅保留供查看；请重新选择规则。' }, catalog: { repository: REPOSITORY, path: trackedPath(item.source)!, sha: item.source.catalog?.sha ?? '', commit: item.source.catalog?.commit ?? snapshot.commit, state: 'removed' } }); removed++;
+      }
+      const updates = plan.filter(p => p.action === 'update');
+      for (let i = 0; i < updates.length && operation === libraryOperation.current; i += 3) {
+        const done = await Promise.all(updates.slice(i, i + 3).map(p => loadLibraryFile(p.file!, snapshot, p.source)));
+        changed += done.filter(s => s.status === 'ready').length; failed += done.filter(s => s.status !== 'ready').length;
+      }
+      if (operation !== libraryOperation.current) { notify('规则同步已取消，已完成的更新保留，未完成来源可重试'); return; }
+      notify(`目录已更新：新增 ${delta.added.length}、修改 ${delta.changed.length}、移除 ${delta.removed.length} 个文件；已添加来源更新 ${changed}，失败 ${failed}，移除标记 ${removed}`);
+    } catch (e) { notify(e instanceof Error ? e.message : '规则库更新失败，旧目录已保留'); }
+    finally { setLibrarySyncing(false); }
+  };
+  const openLibrary = (tab: 'catalog' | 'generate') => {
+    setLibraryTab(tab);
+    if (catalog.origin !== 'live' || Date.now() - Date.parse(catalog.snapshot.checkedAt) > 15 * 60 * 1000) void updateLibrary();
+  };
+  const importLibrary = async (names: string[], snapshot = catalog.snapshot, switchMode = true) => {
+    const files = names.map(name => { const file = findEntry(snapshot, name, 'Loon'); if (!file?.supported) throw new Error(`${name} 暂无 Loon 原生文件，不能加入当前诊断；仍可选择其他客户端生成配置`); return file; });
+    const newFiles = files.filter(f => !userRef.current.some(s => s.url === rawURL(f)));
+    if (userRef.current.length + newFiles.length > MAX_SOURCES) throw new Error('添加后将超过 40 个来源，请先移除不用的规则');
+    setDataset('user'); setLibrarySyncing(true); const operation = ++libraryOperation.current; let failed = 0;
+    try {
+      for (let i = 0; i < files.length && operation === libraryOperation.current; i += 3) {
+        const done = await Promise.all(files.slice(i, i + 3).map(file => {
+          const existing = userRef.current.find(s => s.url === rawURL(file));
+          return existing?.catalog?.sha === file.sha && existing.status === 'ready' ? Promise.resolve(existing) : loadLibraryFile(file, snapshot, existing);
+        }));
+        failed += done.filter(s => s.status !== 'ready').length;
+      }
+      if (operation !== libraryOperation.current) throw new LoadError('cancelled', '添加已取消，已完成的来源保留，未完成来源可重试');
+      if (switchMode) setMode('library');
+      if (failed) throw new Error(`${failed} 个来源未加载成功；已保留失败状态，可在来源中重试`);
+      notify(`已加入 ${files.length} 个 Loon 规则来源，可通过「更新规则库」同步仓库修改`);
+    } finally { setLibrarySyncing(false); }
+  };
+  const simulateGenerated = async (file: GeneratedConfig) => {
+    const missing = libraryChoices.filter(c => { const entry = findEntry(catalog.snapshot, c.category, 'Loon'); return entry && !userRef.current.some(s => s.url === rawURL(entry)); }).length;
+    if (userRef.current.length + missing + 1 > MAX_SOURCES) throw new Error('加入规则和新配置后会超过 40 个来源，请先移除不用的来源');
+    await importLibrary(libraryChoices.map(c => c.category), catalog.snapshot, false);
+    await onPaste({ name: file.filename, content: file.content, hint: 'config' });
+    setMode('simulate'); setQueryType('match');
+  };
+  const cancelLibrary = () => { libraryOperation.current++; catalog.cancel(); for (const id of libraryLoads.current) controllers.current.get(id)?.abort(); };
   const onFiles = async (files: FileList | File[]) => {
     setDataset('user'); setError(''); let count = 0;
     for (const file of Array.from(files).slice(0, MAX_SOURCES)) {
       try {
         if (file.size > MAX_BYTES) throw new Error(`${file.name} 超过 5 MiB`);
-        let content: string; try { content = new TextDecoder('utf-8', { fatal: true }).decode(await file.arrayBuffer()); } catch { throw new Error(`${file.name} 不是 UTF-8 文本`); }
+        let content: string; try { content = new TextDecoder('utf-8', { fatal: true, ignoreBOM: true }).decode(await file.arrayBuffer()); } catch { throw new Error(`${file.name} 不是 UTF-8 文本`); }
         if (content.includes('\0')) throw new Error(`${file.name} 可能是二进制文件，暂不支持`);
         checkCapacity(content); const source = await engineWorker.parse({ id: crypto.randomUUID(), name: file.name, filename: file.name, content, origin: 'file' });
         upsertUser(source); count++;
-        if (source.format === 'loon-config') setMode('simulate'); else if (!userRef.current.some(s => s.format === 'loon-config')) setMode('library');
+        if (source.format === 'loon-config') { setMode('simulate'); setConfigId(source.id); } else if (!userRef.current.some(s => s.format === 'loon-config')) setMode('library');
       } catch (e) { setError(e instanceof Error ? e.message : '文件导入失败'); }
     }
     if (count) notify(`已导入 ${count} 个文件，原文与行号已保留`);
@@ -120,6 +207,7 @@ export default function App() {
     } catch (e) { setError(e instanceof Error ? e.message : '引用加载失败'); } finally { setDependencyBusy(false); }
   };
   const reload = async (s: Source) => {
+    if (trackedPath(s)) { await updateLibrary(); return; }
     if (s.url && !s.demo && /^https?:/.test(s.url)) { const result = await loadURL(s.url, s); notify(result.error ? result.error.message : '远程内容已刷新'); }
     else { const parsed = await engineWorker.parse({ ...s, formatHint: s.format === 'loon-plugin' ? 'plugin' : s.format === 'loon-config' ? 'config' : 'auto' }); updateSource(s.id, () => ({ ...parsed, enabled: s.enabled })); notify('原文已重新解析'); }
   };
@@ -136,8 +224,8 @@ export default function App() {
   const exportResults = (format: 'json' | 'csv') => downloadFile(`rule-finder-${new Date().toISOString().slice(0, 10)}.${format}`, format === 'json' ? JSON.stringify({ tool: 'Rule Finder', version: 1, exportedAt: new Date().toISOString(), scope: '本地静态规则模拟，非客户端实测', results }, null, 2) : toCSV(results), format === 'json' ? 'application/json' : 'text/csv;charset=utf-8');
   const showDemo = () => { setDemos(createDemo()); setDataset('demo'); setMode('simulate'); setQueryType('match'); setInput('api.example.com'); setLastInputs(['api.example.com']); setConditions({}); notify('内置示例已恢复，用户规则独立保留'); };
   return <div className="app-shell">
-    <header className="app-header"><a className="brand" href={import.meta.env.BASE_URL} aria-label="分流规则定位器首页"><span className="brand-mark"><Search size={24} strokeWidth={2.2} /><i /></span><span><strong>分流规则定位器</strong><small>RULE FINDER</small></span><span className="version">1.0</span></a><div className="header-center"><span className="client-label">客户端</span><div className="client-select"><select aria-label="客户端">{adapters.map(a => <option key={a.id} value={a.id}>{a.name}</option>)}</select><ChevronDown size={13} /></div><span className="header-divider" /><div className="mode-switch" aria-label="工作模式"><button className={mode === 'library' ? 'active' : ''} onClick={() => setMode('library')}><LayersIcon />规则库检索</button><button className={mode === 'simulate' ? 'active' : ''} onClick={() => setMode('simulate')}><GitIcon />配置模拟</button></div></div><nav className="header-actions"><button className="help-button" aria-label="支持范围" onClick={() => setSupportOpen(true)}><HelpCircle size={17} /><span>支持范围</span></button><span className="header-divider" /><button className="icon-button" title={theme === 'dark' ? '切换浅色模式' : '切换深色模式'} aria-label={theme === 'dark' ? '切换浅色模式' : '切换深色模式'} onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>{theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}</button><a className="icon-button github-link" href="https://github.com/hhhoratioxu/Toolbox/tree/main/RuleFinder" target="_blank" rel="noreferrer" title="GitHub 源码" aria-label="GitHub 源码"><Github size={19} /></a></nav></header>
-    <div className="workspace"><SourcePanel sources={sources} dataset={dataset} setDataset={setDataset} onImport={() => { setReplacementURL(''); setImportOpen(true); }} onFiles={files => void onFiles(files)} onToggle={id => updateSource(id, s => ({ ...s, enabled: !s.enabled, modified: true }))} onRemove={id => { controllers.current.get(id)?.abort(); controllers.current.delete(id); const setter = dataset === 'demo' ? setDemos : setUsers; setter(prev => prev.filter(s => s.id !== id)); if (viewer?.sourceId === id) setViewer(undefined); notify('来源已移除；依赖此来源的配置会显示不完整'); }} onReload={s => void reload(s)} onView={s => setViewer({ sourceId: s.id, line: s.rules[0]?.line ?? 1 })} onCancel={id => controllers.current.get(id)?.abort()} onDemo={showDemo} onDependencies={() => void loadDependencies()} loading={dependencyBusy} onClear={() => setConfirmClear(true)} />
+    <header className="app-header"><a className="brand" href={import.meta.env.BASE_URL} aria-label="分流规则定位器首页"><span className="brand-mark"><Search size={24} strokeWidth={2.2} /><i /></span><span><strong>分流规则定位器</strong><small>RULE FINDER</small></span><span className="version">1.1</span></a><div className="header-center"><span className="client-label">客户端</span><div className="client-select"><select aria-label="客户端">{adapters.map(a => <option key={a.id} value={a.id}>{a.name}</option>)}</select><ChevronDown size={13} /></div><span className="header-divider" /><div className="mode-switch" aria-label="工作模式"><button className={mode === 'library' ? 'active' : ''} onClick={() => setMode('library')}><LayersIcon />规则库检索</button><button className={mode === 'simulate' ? 'active' : ''} onClick={() => setMode('simulate')}><GitIcon />配置模拟</button></div></div><nav className="header-actions"><button className="help-button" aria-label="支持范围" onClick={() => setSupportOpen(true)}><HelpCircle size={17} /><span>支持范围</span></button><span className="header-divider" /><button className="icon-button" title={theme === 'dark' ? '切换浅色模式' : '切换深色模式'} aria-label={theme === 'dark' ? '切换浅色模式' : '切换深色模式'} onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>{theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}</button><a className="icon-button github-link" href="https://github.com/hhhoratioxu/Toolbox/tree/main/RuleFinder" target="_blank" rel="noreferrer" title="GitHub 源码" aria-label="GitHub 源码"><Github size={19} /></a></nav></header>
+    <div className="workspace"><SourcePanel sources={sources} dataset={dataset} setDataset={setDataset} onImport={() => { setReplacementURL(''); setImportOpen(true); }} onFiles={files => void onFiles(files)} onToggle={id => updateSource(id, s => ({ ...s, enabled: !s.enabled, modified: true }))} onRemove={id => { controllers.current.get(id)?.abort(); controllers.current.delete(id); const setter = dataset === 'demo' ? setDemos : setUsers; setter(prev => prev.filter(s => s.id !== id)); if (viewer?.sourceId === id) setViewer(undefined); notify('来源已移除；依赖此来源的配置会显示不完整'); }} onReload={s => void reload(s)} onView={s => setViewer({ sourceId: s.id, line: s.rules[0]?.line ?? 1 })} onCancel={id => controllers.current.get(id)?.abort()} onDemo={showDemo} onDependencies={() => void loadDependencies()} loading={dependencyBusy} onClear={() => setConfirmClear(true)} onLibrary={() => openLibrary("catalog")} onGenerate={() => openLibrary("generate")} />
       <main className="main-content">
         <div className="page-heading"><div><div className="eyebrow"><span />本地规则诊断工作台</div><h1>每一次匹配，都有迹可循<span>。</span></h1><p>从目标出发，找到命中规则、原始位置和策略依据。</p></div><span className="local-badge"><ShieldCheck size={14} />隐私优先 · 本地计算</span></div>
         {dataset === 'demo' && <div className="demo-notice"><Sparkles size={15} /><span>正在体验内置示例。试试查询，或导入你的规则开始定位。</span><button onClick={() => { setReplacementURL(''); setImportOpen(true); }}>导入我的规则<ArrowRight size={13} /></button></div>}
@@ -159,6 +247,7 @@ export default function App() {
         <footer className="main-footer"><span><ShieldCheck size={13} />配置留在本地，结论有据可查。</span><button onClick={() => setSupportOpen(true)}>匹配机制与已知限制<ArrowUpRightSmall /></button><span className="keyboard-hint"><Command size={11} /> K 聚焦 · {batch ? '⌘ / Ctrl + Enter 查询' : 'Enter 查询'}</span></footer>
       </main>
     </div>
+    {libraryTab && <LibraryDialog snapshot={catalog.snapshot} origin={catalog.origin} busy={catalog.busy || librarySyncing} error={catalog.error} initialTab={libraryTab} choices={libraryChoices} onChoices={setLibraryChoices} onClose={() => setLibraryTab(undefined)} onRefresh={updateLibrary} onCancel={cancelLibrary} onAdd={names => importLibrary(names)} onSimulate={simulateGenerated} onCopy={text => void copy(text)} />}
     {importOpen && <ImportDialog onClose={() => setImportOpen(false)} onPaste={onPaste} onRemote={onRemote} onFiles={files => void onFiles(files)} initialURL={replacementURL} />}
     {viewer && sources.some(s => s.id === viewer.sourceId) && <RuleViewer selection={viewer} sources={sources} onClose={() => setViewer(undefined)} onSelect={setViewer} onCopy={text => void copy(text)} onReplace={url => { setViewer(undefined); setReplacementURL(url ?? ''); setImportOpen(true); }} />}
     {supportOpen && <SupportDialog onClose={() => setSupportOpen(false)} />}

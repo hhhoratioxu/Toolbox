@@ -22,6 +22,7 @@ export interface Source {
   content: string; rules: Rule[]; references: Reference[]; groups: PolicyGroup[];
   diagnostics: Diagnostic[]; enabled: boolean; status: SourceStatus; loadedAt?: string;
   error?: { kind: ErrorKind; message: string }; demo: boolean; modified?: boolean;
+  catalog?: { repository: string; path: string; sha: string; commit: string; state?: 'current' | 'removed' };
 }
 export interface SourceDraft {
   id: string; name: string; content: string; origin: Source['origin']; filename?: string;

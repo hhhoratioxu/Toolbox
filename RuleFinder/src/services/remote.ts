@@ -27,7 +27,7 @@ export async function loadRemote(input: string, signal?: AbortSignal, fetcher: t
     if (!response.ok) throw new LoadError('http', `HTTP ${response.status} ${response.statusText}：规则文件加载失败。`);
     if (+response.headers.get('Content-Length')! > MAX_BYTES) throw new LoadError('size', '远程文件超过 5 MiB 限制，请拆分后导入。');
     const reader = response.body?.getReader(); let size = 0;
-    const decoder = new TextDecoder('utf-8', { fatal: true }); let text = '';
+    const decoder = new TextDecoder('utf-8', { fatal: true, ignoreBOM: true }); let text = '';
     if (reader) {
       while (true) {
         const { value, done } = await reader.read(); if (done) break;

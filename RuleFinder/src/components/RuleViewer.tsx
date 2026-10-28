@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { Source, TraceStep } from '../core/types';
 import { githubLineURL } from '../services/remote';
 import { downloadFile } from '../services/export';
+import { rawURL } from '../library/catalog';
 import { Modal, formatLabels, kindLabels } from './Shared';
 export interface ViewerSelection { sourceId: string; line: number; trace?: TraceStep[]; reason?: string; raw?: string }
 export function RuleViewer({ selection, sources, onClose, onSelect, onCopy, onReplace }: { selection: ViewerSelection; sources: Source[]; onClose: () => void; onSelect: (s: ViewerSelection) => void; onCopy: (text: string) => void; onReplace: (url?: string) => void }) {
@@ -10,11 +11,13 @@ export function RuleViewer({ selection, sources, onClose, onSelect, onCopy, onRe
   useEffect(() => { if (all) codeRef.current?.querySelector('.highlight')?.scrollIntoView({ block: 'center', inline: 'nearest' }); }, [all, selection.line, selection.sourceId]);
   if (!source) return null;
   const lines = source.content ? source.content.split(/\r\n|\n|\r/) : []; const start = all ? Math.max(0, selection.line - 101) : Math.max(0, selection.line - 5); const end = Math.min(lines.length, selection.line + (all ? 100 : 4));
-  const link = githubLineURL(source.url, selection.line);
+  const loadedURL = source.catalog?.sha ? rawURL({ path: source.catalog.path, sha: source.catalog.sha, size: 0 }, source.catalog.commit) : source.url;
+  const link = githubLineURL(loadedURL, selection.line);
   return <Modal title="规则原文" subtitle="原始行号与文件完全对应，注释和空行均保留。" onClose={onClose} wide>
     <div className="viewer-meta"><div className="viewer-file"><FileCode2 size={21} /><div><strong>{source.name}</strong><span>Loon · {formatLabels[source.format]} · {kindLabels[source.kind]} · {lines.length} 行</span></div></div><button className="secondary small" disabled={!source.content} onClick={() => downloadFile(source.filename ?? source.name, source.content)}><Download size={14} />下载原文</button></div>
     {source.url && <div className="viewer-url"><LinkSmall /><code>{source.url}</code><button className="icon-button" title="复制来源" onClick={() => onCopy(source.url!)}><Copy size={14} /></button></div>}
     <div className="viewer-loaded"><CalendarClock size={13} />最近加载：{source.loadedAt ? new Date(source.loadedAt).toLocaleString('zh-CN', { hour12: false }) : '尚未加载'}{source.error && <span className="danger-text">{source.error.message}</span>}</div>
+    {source.catalog?.sha && <div className="viewer-loaded">仓库来源：{source.catalog.path} · 本次加载版本 {source.catalog.commit.slice(0, 7)} · 原文链接固定到此版本</div>}
     {!!selection.trace?.length && <div className="trace"><span className="section-label">来源路径</span><div>{selection.trace.map((step, i) => <span key={i}>{i > 0 && <ArrowRight size={13} />}<button onClick={() => { setAll(false); onSelect({ ...selection, sourceId: step.sourceId, line: step.line }); }}>{step.name}<b>{step.line > 0 ? `L${step.line}` : "待加载"}</b></button></span>)}</div></div>}
     {selection.reason && <div className="reason-box"><span className="section-label">判断原因</span><p>{selection.reason}</p></div>}
     <div className="code-toolbar"><span>{source.name}<span> : {selection.line > 0 ? selection.line : "尚无原文"}</span></span><div><button onClick={() => setAll(!all)}>{all ? '精简上下文' : '扩展上下文'}</button>{link && <a href={link} target="_blank" rel="noreferrer">GitHub 定位 <ExternalLink size={12} /></a>}</div></div>
