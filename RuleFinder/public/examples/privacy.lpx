@@ -1,0 +1,6 @@
+#!name=隐私规则示例
+#!desc=仅提供规则，不执行脚本
+
+[Rule]
+DOMAIN,ads.example.com,REJECT
+DOMAIN-SUFFIX,tracking.example,REJECT

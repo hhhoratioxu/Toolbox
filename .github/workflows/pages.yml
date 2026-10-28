@@ -4,6 +4,9 @@ on:
   push:
     branches: [main]
     paths:
+      - 'RuleFinder/**'
+      - '!RuleFinder/docs/**'
+      - '!RuleFinder/README.md'
       - 'BirthdayRoom/**'
       - '!BirthdayRoom/docs/**'
       - '!BirthdayRoom/artifacts/**'
@@ -45,11 +48,21 @@ jobs:
         run: pnpm test
       - name: Build for the Toolbox subpath
         run: pnpm run build:pages
+      - name: Install Rule Finder dependencies
+        working-directory: RuleFinder
+        run: pnpm install --frozen-lockfile
+      - name: Test Rule Finder
+        working-directory: RuleFinder
+        run: pnpm test
+      - name: Build Rule Finder for GitHub Pages
+        working-directory: RuleFinder
+        run: pnpm run build:pages
       - name: Assemble the public website
         working-directory: .
         run: |
-          mkdir -p _site/BirthdayRoom
+          mkdir -p _site/BirthdayRoom _site/RuleFinder
           cp -R BirthdayRoom/dist/. _site/BirthdayRoom/
+          cp -R RuleFinder/dist/. _site/RuleFinder/
           cp .github/pages/index.html _site/index.html
       - name: Configure Pages
         uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6

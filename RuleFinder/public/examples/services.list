@@ -1,0 +1,9 @@
+# 服务规则 · 规则集本身没有策略绑定
+
+DOMAIN-SUFFIX,example.com
+DOMAIN-KEYWORD,example
+
+# 验证域名标签边界：notexample.com 不匹配 example.com 后缀
+DOMAIN,cdn.example.net
+IP-CIDR,198.51.100.0/24,no-resolve
+IP-CIDR6,2001:db8:1234::/48,no-resolve

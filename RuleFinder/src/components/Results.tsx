@@ -1,0 +1,46 @@
+import { ArrowUpRight, Check, CircleHelp, Copy, FileSearch, Filter, ChevronLeft, ChevronRight, ArrowRight, ShieldCheck, Layers3, GitBranch, Info } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import type { Evaluation, QueryResult } from '../core/types';
+import type { QueryItem, TextHit } from '../services/worker';
+import type { ViewerSelection } from './RuleViewer';
+import { Status } from './Shared';
+import { resultSummary } from '../services/export';
+
+export function ResultSummary({ result: r, demo, item, onCopy, onView }: { result: QueryResult; demo: boolean; item: QueryItem; onCopy: (s: string) => void; onView: (v: ViewerSelection) => void }) {
+  const selected = r.rows.find(e => e.id === (r.effectiveId ?? r.candidateId));
+  const matches = r.rows.filter(e => e.verdict === 'match').length; const unknowns = r.rows.filter(e => e.verdict === 'unknown').length;
+  const group = r.groups.find(g => g.name === r.policy);
+  const title = r.certainty === 'certain' ? '规则选择确定' : r.certainty === 'library' ? '仅检索，不推断生效策略' : r.certainty === 'no-config' ? '需要完整配置' : r.certainty === 'none' ? '未找到匹配规则' : '结论待确认';
+  return <>
+    <section className={`summary-card ${r.certainty === 'certain' ? 'certain' : r.certainty === 'uncertain' ? 'uncertain' : ''}`} aria-label="查询结果摘要">
+      <div className="summary-top"><span><i />{r.mode === 'simulate' ? '当前模拟结果' : '规则库检索结果'}{demo && <em>示例数据</em>}{r.modified && <em>条件已调整</em>}</span><button className="icon-button" aria-label="复制结果摘要" title="复制结果摘要" onClick={() => onCopy(resultSummary(item))}><Copy size={16} /></button></div>
+      <div className="summary-main"><div className="summary-policy"><span className="summary-symbol">{r.certainty === 'certain' ? <Check size={24} /> : r.certainty === 'uncertain' ? <CircleHelp size={24} /> : <Layers3 size={24} />}</span><div><span className="section-label">{r.mode === 'library' ? '符合条件的规则' : selected?.disposition === 'candidate' ? '当前候选策略' : '命中的策略'}</span><h2>{r.mode === 'library' ? `${matches} 条匹配` : r.policy ?? '尚未确定'}</h2></div></div><div className={`certainty-pill ${r.certainty}`}><span />{title}</div></div>
+      <div className="summary-divider" />
+      <div className="summary-details"><div><span className="section-label">规范化目标</span><strong className="mono">{r.target.normalized}</strong><small>{r.target.ip ? 'IP 字面量' : '域名'}{r.target.port ? ` · 端口 ${r.target.port}` : ''}{r.target.transport ? ` · ${r.target.transport}` : ' · 协议未提供'}</small></div><div><span className="section-label">{r.mode === 'library' ? '策略绑定' : '规则来源'}</span>{selected ? <button className="summary-source" onClick={() => onView(selectionFor(selected))}>{selected.trace.at(-1)?.name}<span>L{selected.rule.line}<ArrowUpRight size={13} /></span></button> : <strong className="normal-weight">{r.mode === 'library' ? '未提供完整配置绑定' : '暂无生效规则'}</strong>}<small>{selected ? `${selected.rule.type} · ${selected.rule.value}` : r.mode === 'library' ? '独立规则不代表实际客户端策略' : '导入主配置及其依赖后重新查询'}</small></div><div className="summary-metrics"><span className="section-label">匹配概览</span><div><b>{matches}</b><span>匹配</span><i /><b className={unknowns ? 'amber-text' : ''}>{unknowns}</b><span>待判断</span></div><small>{r.checked.toLocaleString()} 条已检查 · {r.elapsed.toFixed(1)} ms</small></div></div>
+    </section>
+    {r.incomplete && r.certainty !== 'no-config' && <div className="partial-notice"><CircleHelp size={14} /><span>部分结果：存在未就绪或未能展开的规则依赖。{r.certainty === 'certain' ? '更高优先级规则已确定，但匹配明细仍不完整。' : '后续规则只能作为候选。'}</span></div>}
+    {selected && <div className="decision-path"><GitBranch size={15} /><span>{selected.trace.map((t, i) => <span key={i}>{i > 0 && <ArrowRight size={12} />}<button onClick={() => onView({ ...selectionFor(selected), sourceId: t.sourceId, line: t.line })}>{t.name}<small>{t.line > 0 ? `L${t.line}` : "待加载"}</small></button></span>)}</span></div>}
+    {(!!r.missing.length || group) && <details className={`uncertainty-details ${r.certainty === 'uncertain' ? 'warning' : ''}`} open={r.certainty === 'uncertain' || r.certainty === 'no-config'}><summary><Info size={15} /><span>{r.certainty === 'uncertain' ? '更高优先级规则或依赖尚不能判断' : group ? `已定位到策略组「${group.name}」，最终节点未知` : '结论范围与缺失信息'}</span><span className="detail-count">{r.missing.length}</span></summary><div>{r.missing.slice(0, 20).map((message, i) => <p key={i}>{message}</p>)}{r.missing.length > 20 && <p>另有 {r.missing.length - 20} 项，请查看规则列表或导出完整 JSON。</p>}{group && <div className="group-members"><span>{group.type}</span>{group.members.map((member, i) => <code key={i}>{member}</code>)}<small>静态成员列表，不代表当前选中节点</small></div>}</div></details>}
+  </>;
+}
+export function selectionFor(row: Evaluation): ViewerSelection { return { sourceId: row.rule.sourceId, line: row.rule.line, trace: row.trace, reason: row.reason, raw: row.rule.raw }; }
+function disposition(row: Evaluation): string {
+  if (row.disposition === 'effective') return '当前生效';
+  if (row.disposition === 'candidate') return '候选规则';
+  if (row.disposition === 'shadowed') return '后续匹配';
+  return row.verdict === 'unknown' ? '无法判断' : '匹配';
+}
+export function ResultTable({ result: r, onView }: { result: QueryResult; onView: (v: ViewerSelection) => void }) {
+  const [filter, setFilter] = useState<'all' | 'match' | 'unknown'>('all'); const [page, setPage] = useState(0);
+  useEffect(() => { setPage(0); }, [r, filter]);
+  const filtered = r.rows.filter(row => filter === 'all' || row.verdict === filter); const pages = Math.ceil(filtered.length / 25);
+  return <section className="results-section"><div className="results-heading"><h2>匹配明细 <span>{r.rows.length}</span></h2><div className="result-filters"><Filter size={13} />{([{ key: 'all', label: '全部结果' }, { key: 'match', label: '匹配' }, { key: 'unknown', label: '无法判断' }] as const).map(f => <button key={f.key} className={filter === f.key ? 'active' : ''} onClick={() => setFilter(f.key)}>{f.label}</button>)}</div></div>
+    <div className="table-container"><table className="results-table"><thead><tr><th>状态</th><th>规则类型</th><th>匹配内容</th><th>策略</th><th>来源 / 行号</th><th><span className="sr-only">定位</span></th></tr></thead><tbody>{filtered.slice(page * 25, page * 25 + 25).map(row => <tr key={row.id} className={row.disposition === 'effective' ? 'effective-row' : ''} tabIndex={0} role="button" aria-label={`定位 ${row.rule.type} ${row.rule.value} ${row.rule.line > 0 ? `第 ${row.rule.line} 行` : "尚未取得原文"}`} onClick={() => onView(selectionFor(row))} onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onView(selectionFor(row)); } }}><td><Status verdict={row.verdict} label={disposition(row)} /></td><td><span className={`rule-type ${row.rule.type === 'FINAL' ? 'final-type' : ''}`}>{row.rule.type}</span></td><td className="value-cell"><code title={row.rule.value}>{row.rule.value}</code><p title={row.reason}>{row.disposition === 'shadowed' ? '前面的匹配规则已决定策略，此条不再采用' : row.reason}</p></td><td><span className={`policy-badge ${!row.policy ? 'unbound' : ''}`}>{row.policy ?? '未提供策略绑定'}</span></td><td className="source-cell"><span title={row.trace.at(-1)?.name}>{row.trace.at(-1)?.name}</span><code>{row.rule.line > 0 ? `L${row.rule.line}` : "待加载"}</code></td><td><ArrowUpRight size={15} /></td></tr>)}</tbody></table>
+      {!filtered.length && <div className="empty-results"><FileSearch size={30} /><h3>{r.certainty === 'no-config' ? '导入主配置，开始模拟' : filter === 'all' ? '没有匹配结果' : '没有此类结果'}</h3><p>{r.certainty === 'no-config' ? '可以先切换「规则库检索」查询独立规则文件。' : '检查目标拼写，或启用更多规则来源后再试。'}</p></div>}
+    </div><div className="table-footer"><span><ShieldCheck size={13} />Loon 3.0.3+ 规则语义{r.mode === 'simulate' ? ' · 按优先级排列' : ' · 不模拟实际策略'}<span className="excluded"> · 已排除 {r.noMatch.toLocaleString()} 条不匹配规则</span></span>{pages > 1 && <div className="pagination"><button aria-label="上一页" disabled={page === 0} onClick={() => setPage(page - 1)}><ChevronLeft size={15} /></button><span>{page + 1} / {pages}</span><button aria-label="下一页" disabled={page + 1 >= pages} onClick={() => setPage(page + 1)}><ChevronRight size={15} /></button></div>}</div>
+  </section>;
+}
+export function TextResults({ hits, term, onView }: { hits: TextHit[]; term: string; onView: (v: ViewerSelection) => void }) {
+  const [page, setPage] = useState(0); useEffect(() => setPage(0), [hits]);
+  return <section className="results-section"><div className="results-heading"><h2>原文搜索 <span>{hits.length}{hits.length === 1000 ? '+' : ''}</span></h2><span className="muted">文本包含「{term}」不代表规则实际匹配</span></div><div className="text-results">{hits.slice(page * 25, page * 25 + 25).map((hit, i) => <button key={i} onClick={() => onView({ sourceId: hit.sourceId, line: hit.line })}><span><b>{hit.name}</b><code>L{hit.line}</code></span><code>{hit.raw}</code><ArrowUpRight size={16} /></button>)}{!hits.length && <div className="empty-results"><FileSearch size={30} /><h3>没有找到这段文字</h3><p>原文搜索会检查注释、策略名和所有原始内容。</p></div>}</div>{hits.length > 25 && <div className="table-footer"><span>最多显示 1000 个文本命中</span><div className="pagination"><button disabled={page === 0} aria-label="上一页" onClick={() => setPage(page - 1)}><ChevronLeft size={15} /></button><span>{page + 1} / {Math.ceil(hits.length / 25)}</span><button disabled={(page + 1) * 25 >= hits.length} aria-label="下一页" onClick={() => setPage(page + 1)}><ChevronRight size={15} /></button></div></div>}</section>;
+}
