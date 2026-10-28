@@ -1,0 +1,32 @@
+[
+  {
+    "original_tag": "v0.1.0-preview.1",
+    "annotated_tag_object": "1d504b16d4daf7f5082eeae0c05c138b78879303",
+    "commit": "fc534eef2f4dd0e95ed8a6b1b56a1af6fdaa9ac3",
+    "annotation": "object fc534eef2f4dd0e95ed8a6b1b56a1af6fdaa9ac3\ntype commit\ntag v0.1.0-preview.1\ntagger Horatio Xu <hhhoratioxu@users.noreply.github.com> 1792395929 +0800\n\nHoriPet 0.1.0 unsigned desktop preview"
+  },
+  {
+    "original_tag": "v0.1.0-preview.2",
+    "annotated_tag_object": "712b402159f29ecca4949ba2d583bd5d2c34a0da",
+    "commit": "d32c6cfbdbf180600914ba43e6e4d22ab1cefcaf",
+    "annotation": "object d32c6cfbdbf180600914ba43e6e4d22ab1cefcaf\ntype commit\ntag v0.1.0-preview.2\ntagger Horatio Xu <hhhoratioxu@users.noreply.github.com> 1792396314 +0800\n\nHoriPet unsigned preview with bounded native desktop verification"
+  },
+  {
+    "original_tag": "v0.1.0-preview.3",
+    "annotated_tag_object": "5ba0cca4bc576dc660e816c136aadd5975fc4b07",
+    "commit": "86d9827b20b0fe9e702f305afedecbbb4d7fc74d",
+    "annotation": "object 86d9827b20b0fe9e702f305afedecbbb4d7fc74d\ntype commit\ntag v0.1.0-preview.3\ntagger Horatio Xu <hhhoratioxu@users.noreply.github.com> 1792400963 +0800\n\nHoriPet desktop preview with real app quit acceptance"
+  },
+  {
+    "original_tag": "v0.1.0-preview.4",
+    "annotated_tag_object": "0e1651cd10021f3621dcaefef26549d965de06fb",
+    "commit": "886b483ee17dd3275acfae88e12414ab649b4435",
+    "annotation": "object 886b483ee17dd3275acfae88e12414ab649b4435\ntype commit\ntag v0.1.0-preview.4\ntagger Horatio Xu <hhhoratioxu@users.noreply.github.com> 1792401204 +0800\n\nHoriPet signed-off local native acceptance and bounded CI shutdown"
+  },
+  {
+    "original_tag": "v0.1.0-preview.5",
+    "annotated_tag_object": "99cc923f5a45a5b22689d6aa2a83b96f06dc9191",
+    "commit": "c3969382274f53e74751c6840bf34c33227ea469",
+    "annotation": "object c3969382274f53e74751c6840bf34c33227ea469\ntype commit\ntag v0.1.0-preview.5\ntagger Horatio Xu <hhhoratioxu@users.noreply.github.com> 1792401529 +0800\n\nHoriPet preview with deterministic tray-only app shutdown"
+  }
+]
