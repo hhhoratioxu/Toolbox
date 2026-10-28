@@ -39,7 +39,7 @@ npm run preview
 
 ## GitHub Pages 部署
 
-公开体验地址为 **https://hhhoratioxu.github.io/Toolbox/BirthdayRoom/**。
+公开体验地址为 **[打开生日小屋](https://hhhoratioxu.github.io/Toolbox/BirthdayRoom/)**。
 
 仓库的 [Pages 工作流](../.github/workflows/pages.yml) 在向 `main` 推送本工具的代码或 Pages 配置变更时自动运行，也可以在 Actions 中手动启动。它使用 Node.js 24 和锁定的 pnpm 版本安装依赖，执行单元测试，再构建并部署。仓库 Settings → Pages 的发布来源应选择 **GitHub Actions**。
 
