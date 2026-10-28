@@ -1,0 +1,40 @@
+.cat { width: 100%; height: 100%; overflow: visible; pointer-events: none; --tempo: 1; }
+.cat-motion { transform-origin: 128px 266px; animation: breathe calc(3.8s * var(--tempo)) ease-in-out infinite; }
+.cat-head { transform-origin: 128px 192px; }
+.cat-tail { transform-origin: 173px 240px; animation: tail calc(4.2s * var(--tempo)) ease-in-out infinite; }
+.cat-eyes { transform-origin: 128px 153px; transition: transform .07s ease-in-out; }
+.is-blinking .cat-eyes { transform: scaleY(.05); }
+.state-walk .cat-motion, .state-follow .cat-motion { animation: walk-bob calc(.66s * var(--tempo)) ease-in-out infinite; }
+.state-walk .paw-left, .state-follow .paw-left, .state-run .paw-left { transform-origin: 106px 249px; animation: step calc(.66s * var(--tempo)) ease-in-out infinite alternate; }
+.state-walk .paw-right, .state-follow .paw-right, .state-run .paw-right { transform-origin: 150px 249px; animation: step calc(.66s * var(--tempo)) ease-in-out infinite alternate-reverse; }
+.state-run .cat-motion { animation: run-bob calc(.32s * var(--tempo)) ease-in-out infinite; }
+.state-run .paw { animation-duration: calc(.2s * var(--tempo)); }
+.state-sleep .cat-motion { transform: translateY(13px) scaleY(.91); animation: sleep-breathe calc(5s * var(--tempo)) ease-in-out infinite; }
+.state-sleep .cat-head { transform: rotate(8deg) translateY(8px); }
+.state-sleep .cat-tail { animation-duration: calc(12s * var(--tempo)); }
+.state-wake .cat-motion { animation: stretch calc(.65s * var(--tempo)) ease-in-out both; }
+.state-happy .cat-motion { animation: happy-hop calc(.8s * var(--tempo)) ease-in-out infinite; }
+.state-touch .cat-head { animation: nuzzle calc(.8s * var(--tempo)) ease-in-out infinite alternate; }
+.state-drag .cat-motion { animation: dangle calc(1.2s * var(--tempo)) ease-in-out infinite alternate; }
+.state-drag .paw-left { transform: translateY(4px) rotate(8deg); transform-origin: 106px 247px; }
+.state-drag .paw-right { transform: translateY(4px) rotate(-8deg); transform-origin: 150px 247px; }
+.state-eat .cat-head { animation: nibble calc(.45s * var(--tempo)) ease-in-out infinite alternate; }
+.state-eat .cat-mouth { transform: scaleY(1.2); transform-origin: 128px 177px; }
+.cat-hearts, .cat-sparkles { animation: twinkle calc(1.4s * var(--tempo)) ease-in-out infinite alternate; }
+.sleep-letters { animation: dream calc(3s * var(--tempo)) ease-in-out infinite; }
+.cat-low-power .cat-motion { animation-duration: 12s; animation-timing-function: steps(8); }
+.cat-low-power .cat-tail, .cat-low-power .cat-eyes, .cat-low-power .sleep-letters { animation: none; }
+@keyframes breathe { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(1.018) translateY(-1px); } }
+@keyframes tail { 0%, 100% { transform: rotate(-4deg); } 50% { transform: rotate(8deg); } }
+@keyframes walk-bob { 0%, 100% { transform: translateY(0) rotate(-1deg); } 50% { transform: translateY(-4px) rotate(1deg); } }
+@keyframes run-bob { 0%, 100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-10px) rotate(3deg); } }
+@keyframes step { from { transform: translateY(-3px) rotate(-9deg); } to { transform: translateY(2px) rotate(8deg); } }
+@keyframes sleep-breathe { 0%, 100% { transform: translateY(14px) scaleY(.9); } 50% { transform: translateY(12px) scaleY(.92); } }
+@keyframes stretch { 0% { transform: translateY(13px) scaleY(.91); } 60% { transform: translateY(-6px) scaleY(1.08) scaleX(.94); } 100% { transform: none; } }
+@keyframes happy-hop { 0%, 100% { transform: translateY(0); } 45% { transform: translateY(-11px) rotate(-3deg); } 70% { transform: translateY(-6px) rotate(3deg); } }
+@keyframes nuzzle { from { transform: rotate(-6deg) translateX(-2px); } to { transform: rotate(6deg) translateX(2px); } }
+@keyframes dangle { from { transform: rotate(-7deg) scaleY(1.035); } to { transform: rotate(7deg) scaleY(1.035); } }
+@keyframes nibble { from { transform: translateY(8px) rotate(-3deg); } to { transform: translateY(14px) rotate(3deg); } }
+@keyframes twinkle { from { opacity: .45; transform: translateY(2px); } to { opacity: 1; transform: translateY(-5px); } }
+@keyframes dream { 0%, 100% { opacity: .4; transform: translateY(2px); } 65% { opacity: .9; transform: translateY(-7px); } }
+@media (prefers-reduced-motion: reduce) { .cat * { animation-duration: 12s !important; animation-timing-function: steps(4) !important; } }

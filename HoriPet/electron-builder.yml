@@ -1,0 +1,50 @@
+appId: com.horipet.desktop
+productName: HoriPet
+copyright: Copyright © 2026 HoriPet contributors
+directories:
+  output: dist
+  buildResources: resources
+files:
+  - out/**/*
+  - package.json
+  - LICENSE
+  - THIRD_PARTY_NOTICES.md
+extraResources:
+  - from: resources/tray.png
+    to: tray.png
+  - from: resources/trayTemplate.png
+    to: trayTemplate.png
+asar: true
+npmRebuild: false
+artifactName: HoriPet-${version}-${os}-${arch}.${ext}
+mac:
+  category: public.app-category.entertainment
+  minimumSystemVersion: '12.0'
+  icon: resources/icon.icns
+  identity: null
+  target:
+    - dmg
+    - zip
+dmg:
+  title: HoriPet
+  window: { width: 540, height: 380 }
+  contents:
+    - { x: 145, y: 165, type: file }
+    - { x: 395, y: 165, type: link, path: /Applications }
+win:
+  icon: resources/icon.ico
+  executableName: HoriPet
+  target:
+    - nsis
+    - portable
+nsis:
+  oneClick: false
+  perMachine: false
+  allowElevation: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  deleteAppDataOnUninstall: false
+  artifactName: HoriPet-${version}-windows-${arch}-setup.${ext}
+portable:
+  artifactName: HoriPet-${version}-windows-${arch}-portable.${ext}

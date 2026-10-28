@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+ <defs><linearGradient id="bg" x2=".7" y2="1"><stop stop-color="#cddbc4"/><stop offset="1" stop-color="#86a48b"/></linearGradient><linearGradient id="fur" x2=".6" y2="1"><stop stop-color="#fffef8"/><stop offset="1" stop-color="#e1e7de"/></linearGradient></defs>
+ <rect x="22" y="22" width="980" height="980" rx="225" fill="url(#bg)"/>
+ <circle cx="515" cy="520" r="352" fill="none" stroke="#e4ecdc" opacity=".3" stroke-width="2"/>
+ <ellipse cx="512" cy="830" rx="244" ry="25" fill="#304c35" opacity=".12"/>
+ <path d="M305 454 300 250Q301 209 337 235L448 337M571 337 688 235Q722 211 725 253L720 455" fill="url(#fur)" stroke="#c0cbbd" stroke-width="8" stroke-linejoin="round"/>
+ <path d="m328 390 4-113 79 86m197 0 80-87 4 117" fill="#eab8b1"/>
+ <ellipse cx="512" cy="713" rx="190" ry="125" fill="url(#fur)"/>
+ <path d="M267 470C255 364 363 318 509 321 660 314 764 379 759 482 759 608 660 679 514 679 369 679 261 610 267 470Z" fill="url(#fur)" stroke="#bdc9b9" stroke-width="7"/>
+ <ellipse cx="394" cy="488" rx="37" ry="48" fill="#3b5550"/><ellipse cx="630" cy="488" rx="37" ry="48" fill="#3b5550"/>
+ <ellipse cx="383" cy="471" rx="13" ry="16" fill="#fff"/><ellipse cx="619" cy="471" rx="13" ry="16" fill="#fff"/>
+ <ellipse cx="345" cy="550" rx="33" ry="16" fill="#edc2b5" opacity=".65"/><ellipse cx="679" cy="550" rx="33" ry="16" fill="#edc2b5" opacity=".65"/>
+ <path d="M495 550Q512 539 530 550 512 577 495 550" fill="#d39a91"/>
+ <path d="M512 566v18q-15 22-33 4m33-4q15 22 33 4" stroke="#748371" stroke-width="7" fill="none" stroke-linecap="round"/>
+ <path d="M408 683q103 46 207 0" stroke="#84ab94" stroke-width="32" fill="none"/><circle cx="512" cy="712" r="26" fill="#e7c67d" stroke="#c1a66b" stroke-width="5"/>
+ <path d="M501 714h22m-11-3v19" stroke="#ad935f" stroke-width="4"/>
+ <ellipse cx="396" cy="807" rx="87" ry="32" fill="#edf0e6"/><ellipse cx="627" cy="807" rx="87" ry="32" fill="#edf0e6"/>
+ <path d="m783 312 12 33 33 12-33 12-12 33-12-33-33-12 33-12Z" fill="#f9e8b0"/>
+</svg>
