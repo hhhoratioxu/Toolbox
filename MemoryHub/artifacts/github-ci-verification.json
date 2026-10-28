@@ -1,0 +1,17 @@
+{
+  "repository": "https://github.com/hhhoratioxu/Toolbox",
+  "tested_commit": "2631363dac717c50097e35459a33a13318636339",
+  "workflow_run": "https://github.com/hhhoratioxu/Toolbox/actions/runs/40634037134",
+  "runner": "ubuntu-24.04",
+  "validation_steps_passed": [
+    "Set up job",
+    "Run actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5",
+    "Configure isolated CI database",
+    "Validate Compose",
+    "Build and start actual containers",
+    "Run PostgreSQL and pgvector acceptance tests",
+    "Verify HTTP and persisted data across restart",
+    "Validate HTTPS proxy configuration"
+  ],
+  "scope": "Actual image build, Compose startup, 20 PostgreSQL/pgvector tests, HTTP creation and container restart persistence, Caddy configuration validation. No public DNS or certificate issuance."
+}

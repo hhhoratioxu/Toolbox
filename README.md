@@ -4,7 +4,7 @@
 
 | 工具 | 用途 | 状态 |
 |---|---|---|
-| [Memory Hub](MemoryHub/) | 部署在私人服务器上的 AI 长期记忆中心：中文管理界面、项目与人格、授权检索、HTTP / MCP、候选审核、来源与版本、备份恢复 | v0.1.0；本机闭环已验证，详见验收报告 |
+| [Memory Hub](MemoryHub/) | 部署在私人服务器上的 AI 长期记忆中心：中文管理界面、项目与人格、授权检索、HTTP / MCP、候选审核、来源与版本、备份恢复 | v0.1.0；本机闭环与 Linux 容器验证通过，详见验收报告 |
 
 ## Memory Hub
 
@@ -30,3 +30,5 @@ docker compose exec api python -m app.cli init --username admin
 仓库只包含程序、示例配置和明确标注的验收证据；不包含真实密码、Agent 令牌、个人记忆、数据库或私人备份。示例中的模型服务与域名需要自行配置。
 
 新增工具时建立独立目录，并在上表登记用途、运行入口和验证边界。各工具的许可证以对应目录为准；Memory Hub 的原创代码采用 MIT。
+
+[容器构建与核心验收的 GitHub Actions 记录](https://github.com/hhhoratioxu/Toolbox/actions/runs/40634037134)。公网部署和模型效果的尚未验证部分均列在限制清单中。

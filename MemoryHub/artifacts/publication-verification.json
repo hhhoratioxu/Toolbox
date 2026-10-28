@@ -1,0 +1,443 @@
+{
+  "repository": "https://github.com/hhhoratioxu/Toolbox",
+  "commit": "f663c369c1ac275629461050d2ba0db89d630abc",
+  "anonymous_commit_pinned_raw_files": 87,
+  "all_bytes_match": true,
+  "files": [
+    {
+      "path": ".github/workflows/memory-hub.yml",
+      "sha256": "ff411c4eb3ba23d8f207f65a2320d5952803061d430c0d4246b92d937d7725a4",
+      "bytes": 2133
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "980e45c4d689b499b33a594c63e7109735fbb1eee35fb52df1682e2f529f57d8",
+      "bytes": 201
+    },
+    {
+      "path": "MemoryHub/.dockerignore",
+      "sha256": "99e034e8c13f2bcf3087281ac36cce7f9c0745679fcb8df8ecaaf0944e1cd204",
+      "bytes": 134
+    },
+    {
+      "path": "MemoryHub/.env.example",
+      "sha256": "67b58eb538d46cd41750c0938167682244f100a4127acddad2549bbbe3bb39a0",
+      "bytes": 520
+    },
+    {
+      "path": "MemoryHub/.gitignore",
+      "sha256": "e8614bb9894288e12b952093927e0a0388c63c72459618e23df0fda7bae5df31",
+      "bytes": 168
+    },
+    {
+      "path": "MemoryHub/Dockerfile",
+      "sha256": "fb36869b50feac5823ff5166bc22b035241e3cc72806539ef0b05ed55552ceef",
+      "bytes": 920
+    },
+    {
+      "path": "MemoryHub/LICENSE",
+      "sha256": "7f725f2a46a375e408431a77f3aaa3f6daa97773bfc840d06cf7ce8c515e8da1",
+      "bytes": 1140
+    },
+    {
+      "path": "MemoryHub/README.md",
+      "sha256": "68aaa509ed9402b0956e5af6d0894dee81c000d759fcde8ba27e737527ccf960",
+      "bytes": 6018
+    },
+    {
+      "path": "MemoryHub/SHA256SUMS.json",
+      "sha256": "e920bcda85b60330ca9be74e0ffaa6022ef6a04952e7b391f1f88e5eda3e66c0",
+      "bytes": 8125
+    },
+    {
+      "path": "MemoryHub/artifacts/acceptance-junit.xml",
+      "sha256": "e1c903e28f5e4f038226a8d1769d61ba1d08b641a4ad03ebb05f1c94b79a6d2e",
+      "bytes": 2495
+    },
+    {
+      "path": "MemoryHub/artifacts/backup-verification.json",
+      "sha256": "0e2a6b5db758ab46ff0aed20aa3aaa0eaba584058bf4ad1f47aa448c45a9d348",
+      "bytes": 206
+    },
+    {
+      "path": "MemoryHub/artifacts/browser-context.png",
+      "sha256": "da9d0041cc7f209073bf10038bf90aaac8c101440ee62e5601951fc5d65bd805",
+      "bytes": 67886
+    },
+    {
+      "path": "MemoryHub/artifacts/browser-memory-v3.png",
+      "sha256": "05d34941993896be32f3bf521d1f6dce617e44c8450d4183840ef7f2d0cdabff",
+      "bytes": 42135
+    },
+    {
+      "path": "MemoryHub/artifacts/browser-mobile-dark.png",
+      "sha256": "43ee1e104b6744925031850e4c59d0c369af56312d1ac37a087ff5997dc68813",
+      "bytes": 21966
+    },
+    {
+      "path": "MemoryHub/artifacts/browser-overview.png",
+      "sha256": "7eef1d498b6d56cd87812c87d1892dd8340ce687aa032c115fa802c815130fb6",
+      "bytes": 47521
+    },
+    {
+      "path": "MemoryHub/artifacts/caddy-config-validation.json",
+      "sha256": "f92fb12e9d296be35539d184803ba67996e8c9325540e6d21d0403b555ec970f",
+      "bytes": 723
+    },
+    {
+      "path": "MemoryHub/artifacts/live-verification.json",
+      "sha256": "8231dfaafa78f7bf76cc18bcec23eb76a640a9eafadec437bf2df58dbc850a33",
+      "bytes": 669
+    },
+    {
+      "path": "MemoryHub/artifacts/mcp-write-verification.json",
+      "sha256": "03f81e9f14c8aa21e68c3a240ee58a9e7d3a35bb8415f08c091ef3e3fb225d86",
+      "bytes": 182
+    },
+    {
+      "path": "MemoryHub/artifacts/restart-verification.json",
+      "sha256": "ba99fae9b0758598392877e4253331a18866adba03333e1b589f516b172cc7aa",
+      "bytes": 717
+    },
+    {
+      "path": "MemoryHub/artifacts/verification-summary.json",
+      "sha256": "5a6ddd1dfd038d3af42ddd4a5962b0de5326337501e9528ebde655b86915a2a8",
+      "bytes": 545
+    },
+    {
+      "path": "MemoryHub/backend/alembic.ini",
+      "sha256": "277bdd60e616bb32b07faeaf2cd4b25ecbf6ce7c45200c6f982a33529e0eae7e",
+      "bytes": 148
+    },
+    {
+      "path": "MemoryHub/backend/app/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "MemoryHub/backend/app/api.py",
+      "sha256": "9ae4d8144cda67f52d1ba88686b279653dafd0f71eb1adcb097eb3e306a49437",
+      "bytes": 30892
+    },
+    {
+      "path": "MemoryHub/backend/app/auth.py",
+      "sha256": "50ca67db557e7ea9133b6320f3385c75cadfd26a4bbb8aea9a3ad3141e04109c",
+      "bytes": 4005
+    },
+    {
+      "path": "MemoryHub/backend/app/cli.py",
+      "sha256": "54298e143b0ad24eec08927dcadd80cceb1208a72a885b102635dc67c69d4a1f",
+      "bytes": 2682
+    },
+    {
+      "path": "MemoryHub/backend/app/config.py",
+      "sha256": "861f6ee7238f2e6a51c5bcb6d5fe978eefe6ea1b9f7d4def827e0b86ad93fadf",
+      "bytes": 782
+    },
+    {
+      "path": "MemoryHub/backend/app/db.py",
+      "sha256": "cca87b97b7da50c1e40f1f2561a8031ff53a2d31edebbe3a8767f0b824c59295",
+      "bytes": 439
+    },
+    {
+      "path": "MemoryHub/backend/app/lifecycle.py",
+      "sha256": "ac945b5b7899c26a990330324a05d7750cc59d7f0bb4c236c5d90c58d4c01090",
+      "bytes": 8733
+    },
+    {
+      "path": "MemoryHub/backend/app/mcp_server.py",
+      "sha256": "d8df60eddd29837dc37adf845d162fe39a0bfb470f2cd3fed51d3cbb10dfe64e",
+      "bytes": 5748
+    },
+    {
+      "path": "MemoryHub/backend/app/memory.py",
+      "sha256": "dd74cc56910a3839a3e75a4558d2cf5056c8a33cf6f292ec4bb85405b649a9b1",
+      "bytes": 17836
+    },
+    {
+      "path": "MemoryHub/backend/app/model_gateway.py",
+      "sha256": "1d968abe80dc563abdd9288d7baa8b45d964aafa7ec594d9749d0b2458dce20b",
+      "bytes": 2757
+    },
+    {
+      "path": "MemoryHub/backend/app/models.py",
+      "sha256": "84117d8940881cf7463c10e06145cfcdfa083d06094b78846764c0366baa50ff",
+      "bytes": 11398
+    },
+    {
+      "path": "MemoryHub/backend/app/retrieval.py",
+      "sha256": "6f58aaca827cc151fa39f34dc347e330a0c341c6905b46582a67a443f84be9e3",
+      "bytes": 11836
+    },
+    {
+      "path": "MemoryHub/backend/app/schemas.py",
+      "sha256": "e6c2b1183f8ff9bee317d180f412745b781396540878551cc97cafcc429d5d66",
+      "bytes": 5216
+    },
+    {
+      "path": "MemoryHub/backend/app/worker.py",
+      "sha256": "aeeea2d4ad1f1c778557fad9a771cacc1465b53e2002547596ad26b1fcdc68fe",
+      "bytes": 6687
+    },
+    {
+      "path": "MemoryHub/backend/migrations/env.py",
+      "sha256": "3533a64c9bbf362285011863875c1213d08562355256b5e409d77e89e09351d5",
+      "bytes": 268
+    },
+    {
+      "path": "MemoryHub/backend/migrations/versions/0001_initial.py",
+      "sha256": "d7540cc92f6cbfca140762a13e052937b26e371d4e01b30b8498289e8c420839",
+      "bytes": 459
+    },
+    {
+      "path": "MemoryHub/backend/migrations/versions/0001_schema.sql",
+      "sha256": "412e2da88b107f22c01e6e81570c26c346b95cc0e2dd443c548bb1f817ea39a2",
+      "bytes": 7629
+    },
+    {
+      "path": "MemoryHub/backend/pytest.ini",
+      "sha256": "bda7a909340b6a797bc194a64092d27dfda893f358597e668567d0e903e23f6e",
+      "bytes": 55
+    },
+    {
+      "path": "MemoryHub/backend/requirements.in",
+      "sha256": "aa56e573066fd5db2ae03b4835b0dc9366dcc161c8b15fd243543f36c287d420",
+      "bytes": 227
+    },
+    {
+      "path": "MemoryHub/backend/requirements.lock",
+      "sha256": "8ec360055963e76ecc76ac40c3a49dc09782a854a4e9087a76ce10452ae29b34",
+      "bytes": 934
+    },
+    {
+      "path": "MemoryHub/backend/tests/conftest.py",
+      "sha256": "c612289a39f4b60ea982d3b1e4f35145662749c7dae88395cb1431d7a273a8a2",
+      "bytes": 1913
+    },
+    {
+      "path": "MemoryHub/backend/tests/test_acceptance.py",
+      "sha256": "c28acb5bfb00073816d3cb9ebc4d2c5b8f1ab42d985e71957183919d97fae4c0",
+      "bytes": 17856
+    },
+    {
+      "path": "MemoryHub/compose.local.yml",
+      "sha256": "880d5b588784528a712bd68f3d0237b9a73f9f870a0c3d650bbe1a2dbf908d6d",
+      "bytes": 234
+    },
+    {
+      "path": "MemoryHub/compose.yml",
+      "sha256": "d1df87ff7221cb997a05183c053a4e3d5861bb021a1ac8136ab388500bf002b7",
+      "bytes": 2562
+    },
+    {
+      "path": "MemoryHub/deploy/Caddyfile",
+      "sha256": "8d471d398b8c117f8b7f1f7bd1aee759be2c34316ef8dff8e19fc1d6dedf48c8",
+      "bytes": 219
+    },
+    {
+      "path": "MemoryHub/docs/AGENTS.md",
+      "sha256": "7b16aab3e72961711daabbd4a1e2915b9e6d01306d4e939a531eae140f410c73",
+      "bytes": 3544
+    },
+    {
+      "path": "MemoryHub/docs/API.md",
+      "sha256": "7b992f9f674bc62bcf9d2b575d4c3b55460d035158fae5207e5bcb375973a661",
+      "bytes": 8510
+    },
+    {
+      "path": "MemoryHub/docs/ARCHITECTURE.md",
+      "sha256": "d976f5cb27d848f1725614283ccfa4ff9a8da56fc6ba94c116f7c267c7807e53",
+      "bytes": 8023
+    },
+    {
+      "path": "MemoryHub/docs/DATA.md",
+      "sha256": "11a959039bfbc4c2e51ee157f9f2a5fb91abbdee00cd45ad7c29c783e64aaa9c",
+      "bytes": 4699
+    },
+    {
+      "path": "MemoryHub/docs/DEPENDENCIES.md",
+      "sha256": "feace2789b0a016c5437a8ffb0f916609b519ba73e92b3fc992f6053708308e0",
+      "bytes": 3774
+    },
+    {
+      "path": "MemoryHub/docs/DEPLOYMENT.md",
+      "sha256": "f7b1295309725e76bdb83d6f351da4e73aed09ac015bf58e3fabb321fceef3e0",
+      "bytes": 4867
+    },
+    {
+      "path": "MemoryHub/docs/STATUS.md",
+      "sha256": "738ac49cbe0dcf1b760391176d4cf4cea58565e9c30d54cd490c4bfe2cd201c6",
+      "bytes": 4506
+    },
+    {
+      "path": "MemoryHub/docs/VERIFICATION.md",
+      "sha256": "6933bdc1e54ce7539a5e8079b5dd411c297104482db2a22a08efab1f4ab81a03",
+      "bytes": 6041
+    },
+    {
+      "path": "MemoryHub/docs/openapi.json",
+      "sha256": "7325a47099c8398fb78694415789e85a517f8d84e66dd0624dbf629bda2ee936",
+      "bytes": 77499
+    },
+    {
+      "path": "MemoryHub/examples/agent-rules.md",
+      "sha256": "bdc9c56b8642ee8a4102a5abd478e9d09f2970cc9ca288efd0ae0ea52140caab",
+      "bytes": 1988
+    },
+    {
+      "path": "MemoryHub/examples/http_agent.py",
+      "sha256": "b69458f34c6f3ec66b8a0b27decd3f3edaa5d276e8315f5b58a9f9d5cf198cc4",
+      "bytes": 3198
+    },
+    {
+      "path": "MemoryHub/examples/mcp-connection.example.json",
+      "sha256": "e43e3f321f398c5ca42c9c47ca958219fad5875d189099e3d268c8710ac38616",
+      "bytes": 365
+    },
+    {
+      "path": "MemoryHub/examples/mcp_agent.py",
+      "sha256": "a9fd62424107e4781b1b7cc4ccfe39b3976a569e72aa8336aa43219d3b361c43",
+      "bytes": 1173
+    },
+    {
+      "path": "MemoryHub/frontend/index.html",
+      "sha256": "f6a2797f861aaa32c66c789a24f5c50786a4a20e091cae8ce7ed27d667fb06e6",
+      "bytes": 324
+    },
+    {
+      "path": "MemoryHub/frontend/package.json",
+      "sha256": "760bbaad9db5b167e5f0cf1b94f96e59f682e929708a05a14fd3df21271525f1",
+      "bytes": 416
+    },
+    {
+      "path": "MemoryHub/frontend/pnpm-lock.yaml",
+      "sha256": "2acc4302379e84e26caa1800491b4710709473a004594d22c30eed6fa400aadc",
+      "bytes": 36487
+    },
+    {
+      "path": "MemoryHub/frontend/pnpm-workspace.yaml",
+      "sha256": "947412e9456da5039fb06f44d79318bf4a7a9539087e7f7ee0dfb794ff4cbd76",
+      "bytes": 50
+    },
+    {
+      "path": "MemoryHub/frontend/src/components/Login.tsx",
+      "sha256": "13a9d0ad232f537610fe250a724972fcbf034676d9d5ccfd3e2fa9198e5dca30",
+      "bytes": 3312
+    },
+    {
+      "path": "MemoryHub/frontend/src/components/MemoryEditor.tsx",
+      "sha256": "d54b7e7cceb83588fd842c960b0b7a8e41354cc9e2eb25adc81f0a4536864ed2",
+      "bytes": 7295
+    },
+    {
+      "path": "MemoryHub/frontend/src/main.tsx",
+      "sha256": "7d032f93c6a154b88a50e303a57dbe9ca59f96bd36bd1da81eb7334081ef34ad",
+      "bytes": 19331
+    },
+    {
+      "path": "MemoryHub/frontend/src/pages/Agents.tsx",
+      "sha256": "1c0c8fd01833deed9ea96e0b41d150085077f064c833cab8dc8c9f9b0092df0b",
+      "bytes": 11750
+    },
+    {
+      "path": "MemoryHub/frontend/src/pages/Debug.tsx",
+      "sha256": "fb467fa6e5a478263dfcb6336a44fad0bbd922a7acb073605bbd86c56180bc58",
+      "bytes": 9119
+    },
+    {
+      "path": "MemoryHub/frontend/src/pages/Library.tsx",
+      "sha256": "3ec3ea25a6cbb0a381e582db5be506ce9f449037f5852746eca1388024855355",
+      "bytes": 5054
+    },
+    {
+      "path": "MemoryHub/frontend/src/pages/Overview.tsx",
+      "sha256": "defe35a593817831b34e2fb7b9f6d22e8ac324e6861b139ce2be4bc57596166d",
+      "bytes": 5527
+    },
+    {
+      "path": "MemoryHub/frontend/src/pages/Personas.tsx",
+      "sha256": "8b1e4b1b33bf853cc61eff5d59802e73e7f031729e33e80334d851b0a8855405",
+      "bytes": 8569
+    },
+    {
+      "path": "MemoryHub/frontend/src/pages/Projects.tsx",
+      "sha256": "560ea8339329f9d8add7cd9cba1720ed3f5a2b8b0a6b921a2d1dfd06191a3fbc",
+      "bytes": 6121
+    },
+    {
+      "path": "MemoryHub/frontend/src/pages/Review.tsx",
+      "sha256": "569d2770fd9ce00be50610b85bb139345012d5c8d431895a52c3d07e41620ecc",
+      "bytes": 6170
+    },
+    {
+      "path": "MemoryHub/frontend/src/pages/Settings.tsx",
+      "sha256": "c97b78b96ac5cb51b2e8cc90c6c6f44283b61ec9224c337b3611f26e64465ac1",
+      "bytes": 10830
+    },
+    {
+      "path": "MemoryHub/frontend/src/pages/Sources.tsx",
+      "sha256": "50fe8e05482ac93d24644642cc98914bf7b10785140a9a6a382c5ec55f0b46fc",
+      "bytes": 9188
+    },
+    {
+      "path": "MemoryHub/frontend/src/shared.tsx",
+      "sha256": "0fa647a2bca40c9866a39f881d0ec4f84c853c936ac0e2c590d569c5ba67d9c5",
+      "bytes": 6245
+    },
+    {
+      "path": "MemoryHub/frontend/src/style.css",
+      "sha256": "02a7034cce5399789d28231cb94838968589b0ee6e632c4da490396a4f5384ee",
+      "bytes": 27385
+    },
+    {
+      "path": "MemoryHub/frontend/src/vite-env.d.ts",
+      "sha256": "65996936fbb042915f7b74a200fcdde7e410f32a669b1ab9597cfaa4b0faddb5",
+      "bytes": 38
+    },
+    {
+      "path": "MemoryHub/frontend/tsconfig.json",
+      "sha256": "7461a89bf63a32f75fe149f44214931a31a2e11e6ab4a1fd63faacae91393ef6",
+      "bytes": 361
+    },
+    {
+      "path": "MemoryHub/frontend/vite.config.ts",
+      "sha256": "0f8691b4c6411afb1ce2a468ba746255251d6a6c5accd893b0a620eefab1ddec",
+      "bytes": 273
+    },
+    {
+      "path": "MemoryHub/scripts/container_smoke.py",
+      "sha256": "d881afdab347a53380f6e86ecd17cf5b41c57bc179c17fea66f15ac9cf62518c",
+      "bytes": 2194
+    },
+    {
+      "path": "MemoryHub/scripts/dev-start.sh",
+      "sha256": "ad7231ef88e40b6e6efcd63e4eade2ec514f13e02f1996e5744a8479a21426f6",
+      "bytes": 1945
+    },
+    {
+      "path": "MemoryHub/scripts/dev-stop.sh",
+      "sha256": "7768fce9b5d7cdd145cd008b8552e9064e1edb89a2025e0ff97287e10c31ce43",
+      "bytes": 629
+    },
+    {
+      "path": "MemoryHub/scripts/live_acceptance.py",
+      "sha256": "828c57e01651c1d9f561dfd9adee7721855e140cf5deaf66f335f49ff8a215f8",
+      "bytes": 4703
+    },
+    {
+      "path": "MemoryHub/scripts/local-start.sh",
+      "sha256": "e1eacb15927a8e8e6d82638bc99cbcddb4cf19ce40e11f2b05fcc75c1648be6f",
+      "bytes": 336
+    },
+    {
+      "path": "MemoryHub/scripts/package_source.py",
+      "sha256": "c953fe5018b3b75e42f666f3677a6917e6e10b08006dada8dbec9981af658c54",
+      "bytes": 2559
+    },
+    {
+      "path": "README.md",
+      "sha256": "4d0317bb09b65f611908f0a92dba2317aab6d1f59e2b2bf1d00cfcdfa7105cd2",
+      "bytes": 1603
+    }
+  ]
+}

@@ -95,4 +95,4 @@ TEST_DATABASE_URL=postgresql+psycopg://USER:PASSWORD@HOST:5432/memoryhub_test \
   ../.venv/bin/python -m pytest -q --junitxml=../artifacts/acceptance-junit.xml
 ```
 
-实际测试边界请阅读验证报告。容器配置和 Caddy 已用官方工具校验；当前电脑无 Docker daemon，因此镜像完整构建、Compose 启动和公网 TLS 未实际验收。真实 Ollama 成功响应/模型质量未验证；受控响应只用于验证提炼管道和向量失效逻辑。
+实际测试边界请阅读验证报告。本机没有 Docker daemon；[GitHub Actions](https://github.com/hhhoratioxu/Toolbox/actions/runs/40634037134) 已在独立 Linux 环境完成镜像构建、Compose 启动、20 项 PostgreSQL/pgvector 测试、容器重启持久化和 Caddy 配置验证。公网 TLS 签发、真实 Ollama 成功响应和模型质量尚未验证；受控响应只用于验证提炼管道和向量失效逻辑。

@@ -49,7 +49,9 @@
 - 官方 Compose 2.40.3：本地覆盖配置和 public profile 的 `config --quiet` 均通过。
 - 官方 Caddy 2.10.2：Caddyfile adapt + validate 通过。
 - Docker Hub 中四个基础镜像 tag 与 manifest digest 已核实并锁定。
-- **未执行** Docker image build / Compose 容器启动：本机没有 Docker daemon。
+- **通过** Docker image build / Compose 容器启动：本机没有 Docker daemon，因此在独立 ubuntu-24.04 的 [GitHub Actions](https://github.com/hhhoratioxu/Toolbox/actions/runs/40634037134) 实际构建并运行容器；其中 20 项数据库测试、HTTP 创建、容器重启持久化和 Caddy 配置验证均通过。
+- 云端受测代码提交为 `2631363dac717c50097e35459a33a13318636339`；后续交付提交仅更新验证证据、文档与校验清单。
+- [云端验证摘要](../artifacts/github-ci-verification.json) / [首次公开提交全部 87 个文件的匿名 Raw 字节核验](../artifacts/publication-verification.json)。
 - **未执行** 公网 DNS、ACME 证书、真实服务器 HTTPS 或远程物理电脑验证：未提供域名与服务器连接。
 
 ## 复现与追加验证

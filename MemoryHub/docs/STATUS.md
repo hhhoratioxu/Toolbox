@@ -45,4 +45,6 @@
 
 ## 未在当前环境实际验证
 
-公网域名与证书签发、Docker 容器构建与编排启动、真实 Ollama 成功推理和真实 Embedding 语义质量、两台物理电脑访问、第三方商业客户端 UI 接入。已经验证的是同一服务上的两个独立客户端凭证与协议、真实浏览器管理操作、真实 PostgreSQL/pgvector、重启和备份恢复。
+公网域名与证书签发、真实 Ollama 成功推理和真实 Embedding 语义质量、两台物理电脑访问、第三方商业客户端 UI 接入。已经验证的是同一服务上的两个独立客户端凭证与协议、真实浏览器管理操作、真实 PostgreSQL/pgvector、重启和备份恢复。
+
+Docker 镜像构建、Compose 启动、容器重启持久化和容器内 20 项集成测试已由独立 Linux [GitHub Actions](https://github.com/hhhoratioxu/Toolbox/actions/runs/40634037134) 实际通过。本机验证与云端容器验证分别保留证据。
