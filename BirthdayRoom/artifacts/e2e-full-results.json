@@ -1,0 +1,396 @@
+{
+  "metadata": {
+    "actualWorkers": 1
+  },
+  "startTime": 1792388336617,
+  "duration": 506436.353,
+  "files": [
+    {
+      "fileId": "f8fc35f62e185ea9e471",
+      "fileName": "room.spec.ts",
+      "tests": [
+        {
+          "testId": "f8fc35f62e185ea9e471-fb71f41cb540e97a63f3",
+          "title": "complete playable treasure hunt, persistence, birthday animation and replay",
+          "projectName": "desktop-chromium",
+          "location": {
+            "file": "room.spec.ts",
+            "line": 25,
+            "column": 1
+          },
+          "duration": 230081,
+          "annotations": [],
+          "tags": [],
+          "outcome": "expected",
+          "path": [],
+          "ok": true,
+          "results": [
+            {
+              "attachments": [
+                {
+                  "name": "renderer-observations",
+                  "contentType": "application/json"
+                },
+                {
+                  "name": "console-errors",
+                  "contentType": "application/json"
+                }
+              ],
+              "startTime": "2026-10-19T05:38:57.005Z",
+              "workerIndex": 0
+            }
+          ]
+        },
+        {
+          "testId": "f8fc35f62e185ea9e471-7fcadb2eccda1343a9ef",
+          "title": "real desktop keyboard movement and mouse look obey collisions",
+          "projectName": "desktop-chromium",
+          "location": {
+            "file": "room.spec.ts",
+            "line": 98,
+            "column": 1
+          },
+          "duration": 44429,
+          "annotations": [],
+          "tags": [],
+          "outcome": "expected",
+          "path": [],
+          "ok": true,
+          "results": [
+            {
+              "attachments": [],
+              "startTime": "2026-10-19T05:42:47.260Z",
+              "workerIndex": 0
+            }
+          ]
+        },
+        {
+          "testId": "f8fc35f62e185ea9e471-cb031214a5592d3536d2",
+          "title": "touch joystick, touch look and landscape keep controls usable",
+          "projectName": "desktop-chromium",
+          "location": {
+            "file": "room.spec.ts",
+            "line": 113,
+            "column": 1
+          },
+          "duration": 93,
+          "annotations": [
+            {
+              "type": "skip",
+              "location": {
+                "file": "<project-root>/tests/e2e/room.spec.ts",
+                "line": 114,
+                "column": 8
+              }
+            }
+          ],
+          "tags": [],
+          "outcome": "skipped",
+          "path": [],
+          "ok": false,
+          "results": [
+            {
+              "attachments": [],
+              "startTime": "2026-10-19T05:43:31.698Z",
+              "workerIndex": 0
+            }
+          ]
+        },
+        {
+          "testId": "f8fc35f62e185ea9e471-cf70692fb1e143b63770",
+          "title": "WebGL unavailable gives an actionable fallback",
+          "projectName": "desktop-chromium",
+          "location": {
+            "file": "room.spec.ts",
+            "line": 136,
+            "column": 1
+          },
+          "duration": 1014,
+          "annotations": [],
+          "tags": [],
+          "outcome": "expected",
+          "path": [],
+          "ok": true,
+          "results": [
+            {
+              "attachments": [],
+              "startTime": "2026-10-19T05:43:31.803Z",
+              "workerIndex": 0
+            }
+          ]
+        },
+        {
+          "testId": "f8fc35f62e185ea9e471-f3083a7549f0f7ac8816",
+          "title": "complete playable treasure hunt, persistence, birthday animation and replay",
+          "projectName": "mobile-chromium",
+          "location": {
+            "file": "room.spec.ts",
+            "line": 25,
+            "column": 1
+          },
+          "duration": 127272,
+          "annotations": [],
+          "tags": [],
+          "outcome": "expected",
+          "path": [],
+          "ok": true,
+          "results": [
+            {
+              "attachments": [
+                {
+                  "name": "renderer-observations",
+                  "contentType": "application/json"
+                },
+                {
+                  "name": "console-errors",
+                  "contentType": "application/json"
+                }
+              ],
+              "startTime": "2026-10-19T05:43:33.277Z",
+              "workerIndex": 1
+            }
+          ]
+        },
+        {
+          "testId": "f8fc35f62e185ea9e471-630fb0865487f0e1cc27",
+          "title": "real desktop keyboard movement and mouse look obey collisions",
+          "projectName": "mobile-chromium",
+          "location": {
+            "file": "room.spec.ts",
+            "line": 98,
+            "column": 1
+          },
+          "duration": 74,
+          "annotations": [
+            {
+              "type": "skip",
+              "location": {
+                "file": "<project-root>/tests/e2e/room.spec.ts",
+                "line": 99,
+                "column": 8
+              }
+            }
+          ],
+          "tags": [],
+          "outcome": "skipped",
+          "path": [],
+          "ok": false,
+          "results": [
+            {
+              "attachments": [],
+              "startTime": "2026-10-19T05:45:40.732Z",
+              "workerIndex": 1
+            }
+          ]
+        },
+        {
+          "testId": "f8fc35f62e185ea9e471-0fa32209bcc14ec31fee",
+          "title": "touch joystick, touch look and landscape keep controls usable",
+          "projectName": "mobile-chromium",
+          "location": {
+            "file": "room.spec.ts",
+            "line": 113,
+            "column": 1
+          },
+          "duration": 22835,
+          "annotations": [],
+          "tags": [],
+          "outcome": "expected",
+          "path": [],
+          "ok": true,
+          "results": [
+            {
+              "attachments": [],
+              "startTime": "2026-10-19T05:45:40.817Z",
+              "workerIndex": 1
+            }
+          ]
+        },
+        {
+          "testId": "f8fc35f62e185ea9e471-796601e64a8df62b59b2",
+          "title": "WebGL unavailable gives an actionable fallback",
+          "projectName": "mobile-chromium",
+          "location": {
+            "file": "room.spec.ts",
+            "line": 136,
+            "column": 1
+          },
+          "duration": 75,
+          "annotations": [
+            {
+              "type": "skip",
+              "location": {
+                "file": "<project-root>/tests/e2e/room.spec.ts",
+                "line": 137,
+                "column": 8
+              }
+            }
+          ],
+          "tags": [],
+          "outcome": "skipped",
+          "path": [],
+          "ok": false,
+          "results": [
+            {
+              "attachments": [],
+              "startTime": "2026-10-19T05:46:03.658Z",
+              "workerIndex": 1
+            }
+          ]
+        },
+        {
+          "testId": "f8fc35f62e185ea9e471-926bb90b9eafa839ff2d",
+          "title": "complete playable treasure hunt, persistence, birthday animation and replay",
+          "projectName": "mobile-webkit",
+          "location": {
+            "file": "room.spec.ts",
+            "line": 25,
+            "column": 1
+          },
+          "duration": 70530,
+          "annotations": [],
+          "tags": [],
+          "outcome": "expected",
+          "path": [],
+          "ok": true,
+          "results": [
+            {
+              "attachments": [
+                {
+                  "name": "renderer-observations",
+                  "contentType": "application/json"
+                },
+                {
+                  "name": "console-errors",
+                  "contentType": "application/json"
+                }
+              ],
+              "startTime": "2026-10-19T05:46:04.141Z",
+              "workerIndex": 2
+            }
+          ]
+        },
+        {
+          "testId": "f8fc35f62e185ea9e471-26fe415eb3633f930343",
+          "title": "real desktop keyboard movement and mouse look obey collisions",
+          "projectName": "mobile-webkit",
+          "location": {
+            "file": "room.spec.ts",
+            "line": 98,
+            "column": 1
+          },
+          "duration": 289,
+          "annotations": [
+            {
+              "type": "skip",
+              "location": {
+                "file": "<project-root>/tests/e2e/room.spec.ts",
+                "line": 99,
+                "column": 8
+              }
+            }
+          ],
+          "tags": [],
+          "outcome": "skipped",
+          "path": [],
+          "ok": false,
+          "results": [
+            {
+              "attachments": [],
+              "startTime": "2026-10-19T05:47:22.130Z",
+              "workerIndex": 2
+            }
+          ]
+        },
+        {
+          "testId": "f8fc35f62e185ea9e471-605f9e864726fd0b6842",
+          "title": "touch joystick, touch look and landscape keep controls usable",
+          "projectName": "mobile-webkit",
+          "location": {
+            "file": "room.spec.ts",
+            "line": 113,
+            "column": 1
+          },
+          "duration": 277,
+          "annotations": [
+            {
+              "type": "skip",
+              "location": {
+                "file": "<project-root>/tests/e2e/room.spec.ts",
+                "line": 114,
+                "column": 8
+              }
+            }
+          ],
+          "tags": [],
+          "outcome": "skipped",
+          "path": [],
+          "ok": false,
+          "results": [
+            {
+              "attachments": [],
+              "startTime": "2026-10-19T05:47:22.435Z",
+              "workerIndex": 2
+            }
+          ]
+        },
+        {
+          "testId": "f8fc35f62e185ea9e471-fee4e6cf80fe91e7b4ed",
+          "title": "WebGL unavailable gives an actionable fallback",
+          "projectName": "mobile-webkit",
+          "location": {
+            "file": "room.spec.ts",
+            "line": 136,
+            "column": 1
+          },
+          "duration": 262,
+          "annotations": [
+            {
+              "type": "skip",
+              "location": {
+                "file": "<project-root>/tests/e2e/room.spec.ts",
+                "line": 137,
+                "column": 8
+              }
+            }
+          ],
+          "tags": [],
+          "outcome": "skipped",
+          "path": [],
+          "ok": false,
+          "results": [
+            {
+              "attachments": [],
+              "startTime": "2026-10-19T05:47:22.719Z",
+              "workerIndex": 2
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "total": 12,
+        "expected": 6,
+        "unexpected": 0,
+        "flaky": 0,
+        "skipped": 6,
+        "ok": true
+      }
+    }
+  ],
+  "projectNames": [
+    "desktop-chromium",
+    "mobile-chromium",
+    "mobile-webkit"
+  ],
+  "stats": {
+    "total": 12,
+    "expected": 6,
+    "unexpected": 0,
+    "flaky": 0,
+    "skipped": 6,
+    "ok": true
+  },
+  "errors": [],
+  "options": {},
+  "machines": []
+}

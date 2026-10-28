@@ -1,0 +1,11 @@
+
+ RUN  v3.2.7 <project-root>
+
+ ✓ tests/game.test.ts (6 tests) 10ms
+ ✓ tests/world.test.ts (23 tests) 124ms
+
+ Test Files  2 passed (2)
+      Tests  29 passed (29)
+   Start at  13:49:40
+   Duration  523ms (transform 120ms, setup 0ms, collect 169ms, tests 134ms, environment 0ms, prepare 131ms)
+

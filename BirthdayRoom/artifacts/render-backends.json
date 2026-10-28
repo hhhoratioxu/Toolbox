@@ -1,0 +1,28 @@
+[
+  {
+    "name": "desktop",
+    "capturedAt": "2026-10-19T05:51:22.752Z",
+    "fps": "6",
+    "drawCalls": "524",
+    "viewport": [
+      1440,
+      1000
+    ],
+    "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (LLVM 10.0.0) (0x0000C0DE)), SwiftShader driver)",
+    "vendor": "Google Inc. (Google)",
+    "errors": []
+  },
+  {
+    "name": "mobile",
+    "capturedAt": "2026-10-19T05:51:30.487Z",
+    "fps": "56",
+    "drawCalls": "524",
+    "viewport": [
+      390,
+      664
+    ],
+    "renderer": "Apple GPU",
+    "vendor": "Apple Inc.",
+    "errors": []
+  }
+]

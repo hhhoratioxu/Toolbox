@@ -1,0 +1,73 @@
+name: Deploy Toolbox Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'BirthdayRoom/**'
+      - '!BirthdayRoom/docs/**'
+      - '!BirthdayRoom/artifacts/**'
+      - '!BirthdayRoom/README.md'
+      - '.github/workflows/pages.yml'
+      - '.github/pages/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      pages: read
+    defaults:
+      run:
+        working-directory: BirthdayRoom
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: '24'
+      - name: Install the pinned package manager
+        run: npm install --global pnpm@11.25.0
+      - name: Install locked dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Run unit tests
+        run: pnpm test
+      - name: Build for the Toolbox subpath
+        run: pnpm run build:pages
+      - name: Assemble the public website
+        working-directory: .
+        run: |
+          mkdir -p _site/BirthdayRoom
+          cp -R BirthdayRoom/dist/. _site/BirthdayRoom/
+          cp .github/pages/index.html _site/index.html
+      - name: Configure Pages
+        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6
+      - name: Upload the website
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5
