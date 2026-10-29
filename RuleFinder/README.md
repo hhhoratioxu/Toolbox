@@ -36,6 +36,8 @@ v1.2 在主查询框上方增加 **「按软件写规则」**，手机和电脑�
 
 生成结果仍可跟随 main 订阅更新。修改输入、客户端、策略或目录版本后，旧预览失效，需要重新生成。手机编写视图会收起来源管理，输入框与复制 / 下载按钮适配窄屏；点「域名 / IP 定位」即可回到原来的检索与模拟。
 
+![按软件名称生成分流片段](docs/images/software-writer.jpg)
+
 ## 我的分流库与更新
 
 v1.1 接入 [hhhoratioxu/Proxy](https://github.com/hhhoratioxu/Proxy) 的六客户端原生分流目录。当前目录有 26 个分类、156 个文件；数量来自目录内容，后续新增分类无需改前端代码。
@@ -156,9 +158,11 @@ public/examples/                  可下载的原生示例文本
 
 执行 `pnpm test` 可复现 187 项检查，包括用户列出的十项验收场景；另有远程 HTTP / 格式 / 取消 / 超时 / 大小限制、CSV 注入保护、10 万条规则解析和索引匹配回归，以及新增 / 修改 / 删除目录、SHA 字节校验、原生配置与 ZIP 导出。新增 55 项覆盖软件别名、模糊候选、共享分类、动态新分类 / 删除、未知软件、六端片段、不添加兜底、IDN、自定义策略与输入注入防护。
 
-基础浏览器验收步骤与证据边界见 [VERIFICATION.md](docs/VERIFICATION.md)，v1.0 的 GitHub Pages 与线上 Raw 导入检查见 [发布记录](docs/DEPLOYMENT.md)，规则库与配置生成功能见 [v1.1 验证记录](docs/VERIFICATION-v1.1.md)。原文查看器示例：
+基础浏览器验收步骤与证据边界见 [VERIFICATION.md](docs/VERIFICATION.md)，v1.0 的 GitHub Pages 与线上 Raw 导入检查见 [发布记录](docs/DEPLOYMENT.md)，规则库与配置生成功能见 [v1.1 验证记录](docs/VERIFICATION-v1.1.md)。
 
 按软件编写分流的浏览器操作与边界见 [v1.2 验证记录](docs/VERIFICATION-v1.2.md)。
+
+原文查看器示例：
 
 ![原文定位及引用链](docs/images/source-viewer.jpg)
 

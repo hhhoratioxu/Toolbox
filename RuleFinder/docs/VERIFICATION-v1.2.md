@@ -28,6 +28,15 @@
 7. 390 × 844 手机视口生成小红书 Loon 分流片段，输入 / 选择 / 生成操作正常，文档宽度等于视口宽度，无水平溢出。修复并复查了规则候选卡片受全局 input 样式影响的宽度问题。
 8. 返回域名 / IP 定位，原有示例仍显示 DIRECT；重新进入软件编写正常。浏览器错误日志为空。
 
+## 已完成的正式网站验证
+
+- 应用提交：[a7458a7](https://github.com/hhhoratioxu/Toolbox/commit/a7458a7fd5b3763cd2f081ef6808c6bc22516892)，本地 Git tree 与发布 tree 完全一致。`package.json`、软件检索、片段编写器和界面源码均通过固定提交 Raw 逐字节核对。
+- Pages 工作流：[40796884733](https://github.com/hhhoratioxu/Toolbox/actions/runs/40796884733)，构建与部署任务均已成功，正式地址为 [Rule Finder](https://hhhoratioxu.github.io/Toolbox/RuleFinder/)。
+- 在正式 HTTPS 地址打开新入口，加载在线目录，搜索 ChatGPT、填写策略组名，按 Enter 生成 Loon AI 原生订阅片段。实际点击复制并核对剪贴板，再实际下载 `.conf` 文件。
+- 正式网站在 390 × 844 手机视口搜索「电报」，切换 Quantumult X 并指定拒绝策略，生成 `filter_remote` 与 `force-policy=reject`，来源为 QuantumultX/rule/Telegram.list。页面宽度 390，与视口一致，浏览器错误日志为空。
+
+![正式网站按软件生成分流片段](images/software-writer.jpg)
+
 ## 格式依据与验收边界
 
 引用与域名语法核对了 [Loon 订阅](https://nsloon.app/docs/Rule/sub_rule/) / [域名](https://nsloon.app/docs/Rule/domain_rule/)、[Surge RULE-SET](https://manual.nssurge.com/rules/ruleset.html)、[Mihomo 规则](https://wiki.metacubex.one/en/config/rules/) / [providers](https://wiki.metacubex.one/en/config/rule-providers/)、[Egern 规则](https://egernapp.com/docs/configuration/rules/)和 [Quantumult X 开发者示例](https://github.com/crossutility/Quantumult-X/blob/master/sample.conf)。软件名映射中的共享范围另核对 Proxy 当前提交的 AI、Google、Microsoft、Meta 原文。
