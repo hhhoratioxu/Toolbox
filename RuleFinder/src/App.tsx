@@ -18,6 +18,7 @@ import { SupportDialog } from './components/SupportDialog';
 import { ResultSummary, ResultTable, TextResults } from './components/Results';
 import { Modal } from './components/Shared';
 import { LibraryDialog } from './components/LibraryDialog';
+import { SoftwareAssistant } from './components/SoftwareAssistant';
 import { useCatalog } from './library/useCatalog';
 import { findEntry, rawURL, readCatalogRule, REPOSITORY, syncPlan, trackedPath } from './library/catalog';
 import type { CatalogFile, CatalogSnapshot } from './library/catalog';
@@ -29,6 +30,7 @@ export default function App() {
   const [hydrated, setHydrated] = useState(false); const [dataset, setDataset] = useState<'demo' | 'user'>('demo');
   const sources = dataset === 'demo' ? demos : users;
   const [mode, setMode] = useState<QueryResult['mode']>('simulate');
+  const [workbench, setWorkbench] = useState<'lookup' | 'write'>('lookup');
   const [queryType, setQueryType] = useState<'match' | 'text'>('match'); const [input, setInput] = useState('api.example.com');
   const [batch, setBatch] = useState(false); const [advanced, setAdvanced] = useState(false); const [conditions, setConditions] = useState<Conditions>({});
   const [configId, setConfigId] = useState(''); const [lastInputs, setLastInputs] = useState(['api.example.com']); const [searchTerm, setSearchTerm] = useState('');
@@ -51,6 +53,7 @@ export default function App() {
   useEffect(() => { if (!notice) return; const timer = setTimeout(() => setNotice(''), 5000); return () => clearTimeout(timer); }, [notice]);
   useEffect(() => { setViewer(undefined); setConfigId(id => sources.some(s => s.id === id && s.format === 'loon-config') ? id : ''); setActiveResult(0); }, [dataset]);
   useEffect(() => {
+    if (workbench === 'write') { requestId.current++; setQueryBusy(false); return; }
     const id = ++requestId.current; setQueryBusy(true);
     const compute = async () => {
       await engineWorker.sync(sources);
@@ -59,7 +62,7 @@ export default function App() {
     };
     void compute().catch(e => { if (id === requestId.current) setError(e.message); }).finally(() => { if (id === requestId.current) setQueryBusy(false); });
     return () => { requestId.current++; };
-  }, [sources, mode, conditions, configId, lastInputs, searchTerm, queryType]);
+  }, [sources, mode, conditions, configId, lastInputs, searchTerm, queryType, workbench]);
   useEffect(() => { const handler = (event: KeyboardEvent) => { if ((event.metaKey || event.ctrlKey) && event.key === 'k') { event.preventDefault(); queryRef.current?.focus(); } }; document.addEventListener('keydown', handler); return () => document.removeEventListener('keydown', handler); }, []);
   const updateSource = (id: string, update: (s: Source) => Source) => { const setter = dataset === 'demo' ? setDemos : setUsers; setter(prev => prev.map(s => s.id === id ? update(s) : s)); };
   const upsertUser = (source: Source) => {
@@ -152,6 +155,10 @@ export default function App() {
     setLibraryTab(tab);
     if (catalog.origin !== 'live' || Date.now() - Date.parse(catalog.snapshot.checkedAt) > 15 * 60 * 1000) void updateLibrary();
   };
+  const openWriter = () => {
+    setWorkbench('write');
+    if (catalog.origin !== 'live' || Date.now() - Date.parse(catalog.snapshot.checkedAt) > 15 * 60 * 1000) void updateLibrary();
+  };
   const importLibrary = async (names: string[], snapshot = catalog.snapshot, switchMode = true) => {
     const files = names.map(name => { const file = findEntry(snapshot, name, 'Loon'); if (!file?.supported) throw new Error(`${name} 暂无 Loon 原生文件，不能加入当前诊断；仍可选择其他客户端生成配置`); return file; });
     const newFiles = files.filter(f => !userRef.current.some(s => s.url === rawURL(f)));
@@ -176,7 +183,7 @@ export default function App() {
     if (userRef.current.length + missing + 1 > MAX_SOURCES) throw new Error('加入规则和新配置后会超过 40 个来源，请先移除不用的来源');
     await importLibrary(libraryChoices.map(c => c.category), catalog.snapshot, false);
     await onPaste({ name: file.filename, content: file.content, hint: 'config' });
-    setMode('simulate'); setQueryType('match');
+    setWorkbench('lookup'); setMode('simulate'); setQueryType('match');
   };
   const cancelLibrary = () => { libraryOperation.current++; catalog.cancel(); for (const id of libraryLoads.current) controllers.current.get(id)?.abort(); };
   const onFiles = async (files: FileList | File[]) => {
@@ -222,12 +229,14 @@ export default function App() {
   };
   const clear = () => { setInput(''); setLastInputs([]); setSearchTerm(''); setError(''); queryRef.current?.focus(); };
   const exportResults = (format: 'json' | 'csv') => downloadFile(`rule-finder-${new Date().toISOString().slice(0, 10)}.${format}`, format === 'json' ? JSON.stringify({ tool: 'Rule Finder', version: 1, exportedAt: new Date().toISOString(), scope: '本地静态规则模拟，非客户端实测', results }, null, 2) : toCSV(results), format === 'json' ? 'application/json' : 'text/csv;charset=utf-8');
-  const showDemo = () => { setDemos(createDemo()); setDataset('demo'); setMode('simulate'); setQueryType('match'); setInput('api.example.com'); setLastInputs(['api.example.com']); setConditions({}); notify('内置示例已恢复，用户规则独立保留'); };
-  return <div className="app-shell">
-    <header className="app-header"><a className="brand" href={import.meta.env.BASE_URL} aria-label="分流规则定位器首页"><span className="brand-mark"><Search size={24} strokeWidth={2.2} /><i /></span><span><strong>分流规则定位器</strong><small>RULE FINDER</small></span><span className="version">1.1</span></a><div className="header-center"><span className="client-label">客户端</span><div className="client-select"><select aria-label="客户端">{adapters.map(a => <option key={a.id} value={a.id}>{a.name}</option>)}</select><ChevronDown size={13} /></div><span className="header-divider" /><div className="mode-switch" aria-label="工作模式"><button className={mode === 'library' ? 'active' : ''} onClick={() => setMode('library')}><LayersIcon />规则库检索</button><button className={mode === 'simulate' ? 'active' : ''} onClick={() => setMode('simulate')}><GitIcon />配置模拟</button></div></div><nav className="header-actions"><button className="help-button" aria-label="支持范围" onClick={() => setSupportOpen(true)}><HelpCircle size={17} /><span>支持范围</span></button><span className="header-divider" /><button className="icon-button" title={theme === 'dark' ? '切换浅色模式' : '切换深色模式'} aria-label={theme === 'dark' ? '切换浅色模式' : '切换深色模式'} onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>{theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}</button><a className="icon-button github-link" href="https://github.com/hhhoratioxu/Toolbox/tree/main/RuleFinder" target="_blank" rel="noreferrer" title="GitHub 源码" aria-label="GitHub 源码"><Github size={19} /></a></nav></header>
+  const showDemo = () => { setWorkbench('lookup'); setDemos(createDemo()); setDataset('demo'); setMode('simulate'); setQueryType('match'); setInput('api.example.com'); setLastInputs(['api.example.com']); setConditions({}); notify('内置示例已恢复，用户规则独立保留'); };
+  return <div className={`app-shell ${workbench === 'write' ? 'writer-active' : ''}`}>
+    <header className="app-header"><a className="brand" href={import.meta.env.BASE_URL} aria-label="分流规则定位器首页"><span className="brand-mark"><Search size={24} strokeWidth={2.2} /><i /></span><span><strong>分流规则定位器</strong><small>RULE FINDER</small></span><span className="version">1.2</span></a><div className="header-center"><span className="client-label">查询客户端</span><div className="client-select"><select aria-label="客户端">{adapters.map(a => <option key={a.id} value={a.id}>{a.name}</option>)}</select><ChevronDown size={13} /></div><span className="header-divider" /><div className="mode-switch" aria-label="工作模式"><button className={workbench === 'lookup' && mode === 'library' ? 'active' : ''} onClick={() => { setWorkbench('lookup'); setMode('library'); }}><LayersIcon />规则库检索</button><button className={workbench === 'lookup' && mode === 'simulate' ? 'active' : ''} onClick={() => { setWorkbench('lookup'); setMode('simulate'); }}><GitIcon />配置模拟</button></div></div><nav className="header-actions"><button className="help-button" aria-label="支持范围" onClick={() => setSupportOpen(true)}><HelpCircle size={17} /><span>支持范围</span></button><span className="header-divider" /><button className="icon-button" title={theme === 'dark' ? '切换浅色模式' : '切换深色模式'} aria-label={theme === 'dark' ? '切换浅色模式' : '切换深色模式'} onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>{theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}</button><a className="icon-button github-link" href="https://github.com/hhhoratioxu/Toolbox/tree/main/RuleFinder" target="_blank" rel="noreferrer" title="GitHub 源码" aria-label="GitHub 源码"><Github size={19} /></a></nav></header>
     <div className="workspace"><SourcePanel sources={sources} dataset={dataset} setDataset={setDataset} onImport={() => { setReplacementURL(''); setImportOpen(true); }} onFiles={files => void onFiles(files)} onToggle={id => updateSource(id, s => ({ ...s, enabled: !s.enabled, modified: true }))} onRemove={id => { controllers.current.get(id)?.abort(); controllers.current.delete(id); const setter = dataset === 'demo' ? setDemos : setUsers; setter(prev => prev.filter(s => s.id !== id)); if (viewer?.sourceId === id) setViewer(undefined); notify('来源已移除；依赖此来源的配置会显示不完整'); }} onReload={s => void reload(s)} onView={s => setViewer({ sourceId: s.id, line: s.rules[0]?.line ?? 1 })} onCancel={id => controllers.current.get(id)?.abort()} onDemo={showDemo} onDependencies={() => void loadDependencies()} loading={dependencyBusy} onClear={() => setConfirmClear(true)} onLibrary={() => openLibrary("catalog")} onGenerate={() => openLibrary("generate")} />
       <main className="main-content">
         <div className="page-heading"><div><div className="eyebrow"><span />本地规则诊断工作台</div><h1>每一次匹配，都有迹可循<span>。</span></h1><p>从目标出发，找到命中规则、原始位置和策略依据。</p></div><span className="local-badge"><ShieldCheck size={14} />隐私优先 · 本地计算</span></div>
+        <div className="workbench-tabs" aria-label="工具功能"><button aria-pressed={workbench === 'lookup'} className={workbench === 'lookup' ? 'active' : ''} onClick={() => setWorkbench('lookup')}><Search size={16} />域名 / IP 定位</button><button aria-label="按软件写规则" aria-pressed={workbench === 'write'} className={workbench === 'write' ? 'active' : ''} onClick={openWriter}><FileSearch size={16} />按软件写规则<span aria-hidden="true">NEW</span></button></div>
+        {workbench === 'write' ? <SoftwareAssistant snapshot={catalog.snapshot} origin={catalog.origin} busy={catalog.busy || librarySyncing} error={catalog.error} onRefresh={updateLibrary} onCancel={cancelLibrary} onCopy={text => void copy(text)} onCatalog={() => openLibrary('catalog')} /> : <>
         {dataset === 'demo' && <div className="demo-notice"><Sparkles size={15} /><span>正在体验内置示例。试试查询，或导入你的规则开始定位。</span><button onClick={() => { setReplacementURL(''); setImportOpen(true); }}>导入我的规则<ArrowRight size={13} /></button></div>}
         <section className="query-card" aria-label="规则查询"><div className="query-top"><div className="query-type"><button className={queryType === 'match' ? 'active' : ''} onClick={() => { setQueryType('match'); if (input.includes('\n') && !batch) setInput(input.split('\n')[0]); }}><Search size={15} />规则匹配</button><button className={queryType === 'text' ? 'active' : ''} onClick={() => { setQueryType('text'); setBatch(false); setInput(''); setSearchTerm(''); }}><AlignLeft size={15} />原文搜索</button></div><button className={`batch-button ${batch ? 'active' : ''}`} onClick={() => { setQueryType('match'); setBatch(!batch); if (batch) setInput(input.split('\n')[0]); }}><List size={15} />{batch ? '返回单条查询' : '批量查询'}</button></div>
           <form onSubmit={e => { e.preventDefault(); run(); }}><div className={`query-input-wrap ${batch ? 'batch' : ''}`}><Search size={21} />{batch ? <textarea ref={queryRef as React.RefObject<HTMLTextAreaElement>} aria-label="批量查询目标" value={input} onChange={e => setInput(e.target.value)} placeholder={'每行一个域名、URL 或 IP\napi.example.com\n203.0.113.8\n2001:db8::1'} onKeyDown={e => { if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') { e.preventDefault(); run(); } }} spellCheck={false} /> : <input ref={queryRef as React.RefObject<HTMLInputElement>} aria-label={queryType === 'text' ? '原文搜索关键词' : '查询目标'} value={input} onChange={e => setInput(e.target.value)} placeholder={queryType === 'text' ? '搜索规则、注释或策略名…' : '输入域名、完整 URL、IPv4 或 IPv6 地址…'} spellCheck={false} autoComplete="off" />}{!!input && <button type="button" className="icon-button clear-input" aria-label="清空输入" onClick={clear}><X size={16} /></button>}<button type="submit" className="primary query-submit" disabled={queryBusy}>{queryBusy ? <LoaderCircle size={16} className="spin" /> : null}{queryType === 'text' ? '搜索原文' : '查询规则'}{!queryBusy && <ArrowRight size={16} />}</button></div></form>
@@ -244,7 +253,8 @@ export default function App() {
             {current?.result ? <><ResultSummary result={current.result} demo={dataset === 'demo'} item={current} onCopy={text => void copy(text)} onView={setViewer} /><ResultTable result={current.result} onView={setViewer} /></> : current?.error ? <div className="input-error-state"><CircleAlert size={30} /><h3>无法识别这个目标</h3><code>{current.input}</code><p>{current.error}</p></div> : !queryBusy ? <EmptyState type={sources.length ? 'target' : 'sources'} onDemo={showDemo} /> : null}
           </>}
         </div>
-        <footer className="main-footer"><span><ShieldCheck size={13} />配置留在本地，结论有据可查。</span><button onClick={() => setSupportOpen(true)}>匹配机制与已知限制<ArrowUpRightSmall /></button><span className="keyboard-hint"><Command size={11} /> K 聚焦 · {batch ? '⌘ / Ctrl + Enter 查询' : 'Enter 查询'}</span></footer>
+        </>}
+        <footer className="main-footer"><span><ShieldCheck size={13} />配置留在本地，结论有据可查。</span><button onClick={() => setSupportOpen(true)}>匹配机制与已知限制<ArrowUpRightSmall /></button><span className="keyboard-hint"><Command size={11} /> K 聚焦 · {workbench === 'write' ? 'Enter 生成' : batch ? '⌘ / Ctrl + Enter 查询' : 'Enter 查询'}</span></footer>
       </main>
     </div>
     {libraryTab && <LibraryDialog snapshot={catalog.snapshot} origin={catalog.origin} busy={catalog.busy || librarySyncing} error={catalog.error} initialTab={libraryTab} choices={libraryChoices} onChoices={setLibraryChoices} onClose={() => setLibraryTab(undefined)} onRefresh={updateLibrary} onCancel={cancelLibrary} onAdd={names => importLibrary(names)} onSimulate={simulateGenerated} onCopy={text => void copy(text)} />}
